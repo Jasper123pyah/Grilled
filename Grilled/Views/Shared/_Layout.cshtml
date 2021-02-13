@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Grilled</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
     <header>
@@ -16,16 +17,35 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <input type="text" placeholder="Search" aria-label="Search"/>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Top</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Bottoms</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Outerwear</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Footwear</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Accessoires</a>
+                    </div>
                 </div>
+                
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sell</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fav</a>
+                    <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Messages</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">My Items</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Settings</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Create Account</a>
+                    </div>
+                </div>
+                </form>
             </div>
         </nav>
     </header>
