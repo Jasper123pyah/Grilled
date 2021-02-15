@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grilled.Data;
 using Grilled.Models;
-
+using Microsoft.AspNetCore.Hosting;
 
 namespace Grilled.Controllers
 {
@@ -14,8 +14,9 @@ namespace Grilled.Controllers
     {
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
+        
 
-        public AccountController(GrilledContext _context)
+        public AccountController(GrilledContext _context, IWebHostEnvironment _environment)
         {
             context = _context;
         }
@@ -69,6 +70,21 @@ namespace Grilled.Controllers
             {
                 return View(new RegistrationModel());
             }
+        }
+
+        public ActionResult Messages()
+        {
+            return View();
+        }
+
+        public ActionResult Items()
+        {
+            return View();
+        }
+
+        public ActionResult Settings()
+        {
+            return View();
         }
     }
 }

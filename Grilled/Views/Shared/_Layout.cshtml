@@ -19,33 +19,35 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <input type="text" placeholder="Search" aria-label="Search"/>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Categories
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Top</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Bottoms</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Outerwear</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Footwear</a>
-                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Accessoires</a>
+                <form class="form-inline my-2 my-lg-0">
+                    <div class="input-group" >
+                        <input type="text" class="form-control" placeholder="Search">
+                        <select class="form-control search-sl" id="exampleFormControlSelect1">
+                            <option>All Categories</option>
+                            <option>Top</option>
+                            <option>Bottom</option>
+                            <option>Footwear</option>
+                            <option>Outerwear</option>
+                            <option>Accessoires</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button" id="button-addon2">Search</button>
+                        </div>
                     </div>
-                </div>
-                
+                </form>
                 <form class="form-inline my-2 my-lg-0">
                     <a class="navbar-brand" asp-area="" asp-controller="Product" asp-action="Sell">Sell</a>
                     <a class="navbar-brand" asp-area="" asp-controller="Account" asp-action="Favorite">
-                        <img src="~/Images/Heart.png" width="30" height="30" >
+                        <img src="~/Images/Heart.png" width="30" height="30">
                     </a>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Account
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Messages</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">My Items</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Settings</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>

@@ -18,6 +18,7 @@ namespace Grilled.Models
         public string Description { get; set; }
         public string Price { get; set; }
         public string Shipping { get; set; }
+        public List<string> Images { get; set; }
 
     }
 }

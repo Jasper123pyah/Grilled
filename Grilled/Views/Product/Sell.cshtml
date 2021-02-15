@@ -57,8 +57,17 @@
                 <input asp-for="Shipping" class="form-control" />
                 <span asp-validation-for="Shipping" class="text-danger"></span>
             </div>
+            <form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Upload">
+                <span>Images:</span>
+                <input type="file" name="postedFiles" multiple />
+                <input type="submit" class="btn btn-secondary" value="Upload" />
+                <br />
+            </form>
+
+            <br />
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-secondary" />
             </div>
         </form>
     </div>
