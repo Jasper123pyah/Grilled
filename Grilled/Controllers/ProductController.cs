@@ -73,9 +73,10 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            account = context.Account.FirstOrDefault(a => a.Username == "Jasper");
-            string wwwPath = this.environment.WebRootPath;
-            string contentPath = this.environment.ContentRootPath;
+             account = context.Account.FirstOrDefault(a => a.Username == "Jasper"); // should be sessioned account in client
+
+            //string wwwPath = this.environment.WebRootPath;
+            //string contentPath = this.environment.ContentRootPath;
 
             string path = Path.Combine(this.environment.WebRootPath, "Uploads");
 
@@ -84,14 +85,18 @@ namespace Grilled.Controllers
                 Directory.CreateDirectory(path);
             }
 
-            List<string> uploadedFiles = new List<string>();
+            List<Image> uploadedFiles = new List<Image>();
             foreach (IFormFile postedFile in postedFiles)
             {
                 string fileName = Path.GetFileName(postedFile.FileName);
                 using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
                     postedFile.CopyTo(stream);
-                    uploadedFiles.Add(fileName);
+                    uploadedFiles.Add(new Image()
+                    { 
+                        Name = fileName,
+                        Source = path
+                    });
                 }
             }
 
@@ -112,7 +117,7 @@ namespace Grilled.Controllers
                     Price = product.Price,
                     Shipping = product.Shipping,
                     Images = uploadedFiles
-                }) ;
+                });
                 context.SaveChanges();
                 return RedirectToAction("Items", "Account");
             }

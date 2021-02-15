@@ -11,6 +11,7 @@ namespace Grilled.Data
     {
         public DbSet<AccountModel> Account { get; set; }
         public DbSet<ProductModel> Product { get; set; }
+        public DbSet<Image> Image { get; set; }
         public GrilledContext(DbContextOptions options) : base(options) { }
     }
 }
