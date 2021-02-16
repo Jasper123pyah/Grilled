@@ -1,8 +1,20 @@
-﻿@{
+﻿@model DisplayProductModel 
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">FOR YOU</h1>
-    <p>Products listed here</p>
+    @foreach (ProductModel product in Model.Products)
+    {
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="@product.Images[0].Src" alt="Card Image">
+            <div class="card-body">
+                <p class="card-title">@product.Name</p>
+                <p class="card-text">@product.Description</p>
+                <p class="card-text">$@product.Price</p>
+                <p class="card-text"> @(product.Images[0].Src)</p>
+            </div>
+        </div>
+    }
 </div>

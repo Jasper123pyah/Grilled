@@ -26,54 +26,17 @@ namespace Grilled.Controllers
             environment = _environment;
         }
 
-        //public void AddProduct(
-        //               AccountModel account,
-        //               string name,
-        //               string category,
-        //               string designer,
-        //               string size,
-        //               string color,
-        //               string condition,
-        //               string description,
-        //               string price,
-        //               string shipping
-                       
-        //               )
-        //{
-        //    product = account.Products.FirstOrDefault(p => p.Name == name);
-
-        //    if (product == null)
-        //    {
-        //        ProductModel newproduct = new ProductModel()
-        //        {
-        //            Name = name,
-        //            Category = category,
-        //            Designer = designer,
-        //            Size = size,
-        //            Color = color,
-        //            Condition = condition,
-        //            Description = description,
-        //            Price = price,
-        //            Shipping = shipping
-
-        //        };
-        //        account.Products.Add(newproduct);
-        //        context.SaveChanges();
-        //    }
-        //}
-
-
-        // GET: ProductController
         public ActionResult Sell()
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
         {
             context.Database.EnsureCreated();
 
-             account = context.Account.FirstOrDefault(a => a.Username == "Jasper"); // should be sessioned account in client
+            account = context.Account.FirstOrDefault(a => a.Username == "Jasper"); // should be sessioned account
 
             //string wwwPath = this.environment.WebRootPath;
             //string contentPath = this.environment.ContentRootPath;
@@ -95,7 +58,8 @@ namespace Grilled.Controllers
                     uploadedFiles.Add(new Image()
                     { 
                         Name = fileName,
-                        Source = path
+                        Source = path,
+                        Src = @$"~/Uploads/{fileName}"
                     });
                 }
             }
@@ -119,6 +83,7 @@ namespace Grilled.Controllers
                     Images = uploadedFiles
                 });
                 context.SaveChanges();
+
                 return RedirectToAction("Items", "Account");
             }
             else

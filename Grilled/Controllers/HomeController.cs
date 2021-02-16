@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Grilled.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Grilled.Controllers
 {
@@ -14,6 +15,7 @@ namespace Grilled.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly GrilledContext context;
+        DisplayProductModel display = new DisplayProductModel();
 
         public HomeController(ILogger<HomeController> logger, GrilledContext _context)
         {
@@ -21,9 +23,17 @@ namespace Grilled.Controllers
             context = _context;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            context.Database.EnsureCreated();
+            display.Products = new List<ProductModel>();
+            foreach (ProductModel product in context.Product)
+            {
+                ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+                display.Products.Add(productAdd);
+            }
+            return View(display);
         }
 
         public IActionResult Privacy()

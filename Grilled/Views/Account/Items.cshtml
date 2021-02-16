@@ -1,1 +1,18 @@
-﻿
+﻿@model AccountModel
+
+@using Grilled.Controllers;
+
+@foreach (ProductModel product in Model.Products)
+{
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="@product.Images[0].Src" alt="Card Image">
+        <img class="card-img-top" src="~/Uploads/2020-adidas-Yeezy-Boost-350-V2-Bred-Black-Red.png" alt="Card image cap">
+        <div class="card-body">
+            <p class="card-title">@product.Name</p>
+            <p class="card-text">@product.Description</p>
+            <p class="card-text">$@product.Price</p>
+            <p class="card-text"> @(product.Images[0].Src)</p>
+        </div>
+    </div>
+}
+

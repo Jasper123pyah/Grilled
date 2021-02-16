@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Grilled.Data;
 using Grilled.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Grilled.Controllers
 {
@@ -15,7 +16,6 @@ namespace Grilled.Controllers
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
         
-
         public AccountController(GrilledContext _context, IWebHostEnvironment _environment)
         {
             context = _context;
@@ -79,7 +79,11 @@ namespace Grilled.Controllers
 
         public ActionResult Items()
         {
-            return View();
+            context.Database.EnsureCreated();
+
+            account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
+            
+            return View(account);
         }
 
         public ActionResult Settings()
