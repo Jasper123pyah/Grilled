@@ -1,17 +1,31 @@
-﻿@model AccountModel
+﻿@model DisplayProductModel
 
 @using Grilled.Controllers;
 
 @foreach (ProductModel product in Model.Products)
 {
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="@product.Images[0].Src" alt="Card Image">
-        <img class="card-img-top" src="~/Uploads/2020-adidas-Yeezy-Boost-350-V2-Bred-Black-Red.png" alt="Card image cap">
+        <a asp-area="" asp-controller="Product" asp-action="Index" asp-route-id="@product.Id">
+            <img class="card-img-top" src="@product.Images[0].Src" alt="Card Image">
+        </a>
         <div class="card-body">
-            <p class="card-title">@product.Name</p>
-            <p class="card-text">@product.Description</p>
-            <p class="card-text">$@product.Price</p>
-            <p class="card-text"> @(product.Images[0].Src)</p>
+            <h5 style="text-align:left;">
+                @product.Designer
+                <span style="float:right;">
+                    @product.Size
+                </span>
+            </h5>
+
+            <p class="card-text">@product.Name</p>
+
+            <p style="text-align:left;">
+                $@product.Price
+                <span style="float:right;">
+                    <a asp-area="" asp-controller="Account" asp-action="Save">
+                        <img src="~/Images/Heart.png" width="20" height="20">
+                    </a>
+                </span>
+            </p>
         </div>
     </div>
 }

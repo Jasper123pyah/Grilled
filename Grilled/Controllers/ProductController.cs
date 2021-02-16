@@ -25,8 +25,15 @@ namespace Grilled.Controllers
             context = _context;
             environment = _environment;
         }
-
+        public ActionResult Details(ProductModel product)
+        {
+            return View(product);
+        }
         public ActionResult Sell()
+        {
+            return View();
+        }
+        public ActionResult Edit()
         {
             return View();
         }
@@ -59,7 +66,7 @@ namespace Grilled.Controllers
                     { 
                         Name = fileName,
                         Source = path,
-                        Src = @$"~/Uploads/{fileName}"
+                        Src = @$"Uploads/{fileName}"
                     });
                 }
             }

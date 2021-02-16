@@ -28,11 +28,13 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
             display.Products = new List<ProductModel>();
+
             foreach (ProductModel product in context.Product)
             {
                 ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
                 display.Products.Add(productAdd);
             }
+
             return View(display);
         }
 

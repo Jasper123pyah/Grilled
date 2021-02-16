@@ -15,7 +15,8 @@ namespace Grilled.Controllers
     {
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
-        
+        DisplayProductModel display = new DisplayProductModel();
+
         public AccountController(GrilledContext _context, IWebHostEnvironment _environment)
         {
             context = _context;
@@ -83,7 +84,15 @@ namespace Grilled.Controllers
 
             account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
             
-            return View(account);
+            display.Products = new List<ProductModel>();
+
+            foreach (ProductModel product in account.Products)
+            {
+                ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+                display.Products.Add(productAdd);
+            }
+
+            return View(display);
         }
 
         public ActionResult Settings()
