@@ -38,7 +38,6 @@ namespace Grilled.Controllers
             return View();
         }
 
-
         [HttpPost]
         public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
         {
@@ -56,15 +55,20 @@ namespace Grilled.Controllers
 
             foreach (IFormFile postedFile in postedFiles)
             {
-                string fileName = Path.GetFileName(postedFile.FileName);
-                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                if (postedFile.FileName.EndsWith(".jpg") || postedFile.FileName.EndsWith(".png"))
                 {
-                    postedFile.CopyTo(stream);
-                    uploadedFiles.Add(new Image()
-                    { 
-                        Name = fileName,
-                    });
+                    string fileName = Path.GetFileName(postedFile.FileName);
+                    using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                    {
+                        postedFile.CopyTo(stream);
+                        uploadedFiles.Add(new Image()
+                        {
+                            Name = fileName,
+                        });
+                    }
                 }
+                else
+                    return View();
             }
 
             if (account != null)

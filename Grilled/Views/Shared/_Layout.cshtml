@@ -6,7 +6,10 @@
     <title>@ViewData["Title"] - Grilled</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
+    <script src="https://app.g-lytics.com/analytics.js"></script>
+    <script>
+        gl("GL-44603027").send('view')
+    </script>
 </head>
 <body>
     <header>
@@ -22,7 +25,7 @@
                 <form class="form-inline my-2 my-lg-0">
                     <div class="input-group" >
                         <input type="text" class="form-control" placeholder="Search">
-                        <select class="form-control search-sl" id="exampleFormControlSelect1">
+                        <select class="form-control search-sl">
                             <option>All Categories</option>
                             <option>Top</option>
                             <option>Bottom</option>

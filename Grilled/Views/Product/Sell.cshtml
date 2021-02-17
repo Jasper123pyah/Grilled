@@ -1,75 +1,122 @@
-﻿@model Grilled.Models.ProductModel
+﻿@model ProductModel
 
 @{
     ViewData["Title"] = "Sell";
 }
 
 <h1>Add a new listing</h1>
-
-<h4>Details</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Sell">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Designer" class="control-label"></label>
-                <input asp-for="Designer" class="form-control" />
-                <span asp-validation-for="Designer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Color" class="control-label"></label>
-                <input asp-for="Color" class="form-control" />
-                <span asp-validation-for="Color" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Condition" class="control-label"></label>
-                <input asp-for="Condition" class="form-control" />
-                <span asp-validation-for="Condition" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Shipping" class="control-label"></label>
-                <input asp-for="Shipping" class="form-control" />
-                <span asp-validation-for="Shipping" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Images" class="control-label"></label>
-                <input type="file" name="postedFiles" multiple />
-                <span asp-validation-for="Images" class="text-danger"></span>
-            </div>
-           
-            <br />
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-secondary" />
+
+<div class="container">
+
+    <form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Sell">
+        <h4>Details</h4>
+        <div class="row">
+            <div class="col-sm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Category" class="control-label"></label>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                    <select id="type" asp-for="Category" class="form-control">
+                        <option value="Top">Top</option>
+                        <option value="Bottom">Bottom</option>
+                        <option value="Footwear">Footwear</option>
+                        <option value="Outerwear">Outerwear</option>
+                        <option value="Accessoires">Accessoires</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
             </div>
-        </form>
-    </div>
+            <div class="col-sm">
+                <div class="form-group">
+                    <label asp-for="Designer" class="control-label"></label>
+                    <input asp-for="Designer" class="form-control" />
+                    <span asp-validation-for="Designer" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Size" class="control-label"></label>
+                    <select id="size" asp-for="Size" class="form-control">
+                        <option value="XXS">US XXS / EU 40</option>
+                        <option value="XS">US XS / EU 42 / 0</option>
+                        <option value="S">US S / EU 44-46 / 1</option>
+                        <option value="M">US M / EU 48-50 / 2</option>
+                        <option value="L">US L / EU 52-54 / 3</option>
+                        <option value="XL">US XL / EU 56 / 4</option>
+                        <option value="XXL">US XXL / EU 58 / 5</option>
+                    </select>
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <h4>Color</h4>
+                    <input asp-for="Color" class="form-control" />
+                    <span asp-validation-for="Color" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <h4>Condition</h4>
+                    <select asp-for="Condition" class="form-control">
+                        <option>New/Never Worn</option>
+                        <option>Gently Used</option>
+                        <option>Used</option>
+                        <option>Very Worn</option>
+                    </select>
+                    <span asp-validation-for="Condition" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <h4>Description</h4>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <h4>Price</h4>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="form-group">
+                    <h4>Shipping</h4>
+                    <input asp-for="Shipping" class="form-control" />
+                    <span asp-validation-for="Shipping" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <div class="form-group">
+            <h4>Images</h4>
+            <input type="file" name="postedFiles" multiple />
+            <span asp-validation-for="Images" class="text-danger"></span>
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-secondary" />
+        </div>
+    </form>
 </div>
 
 @section Scripts {
