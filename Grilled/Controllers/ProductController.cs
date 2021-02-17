@@ -38,24 +38,22 @@ namespace Grilled.Controllers
             return View();
         }
 
+
         [HttpPost]
         public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
         {
             context.Database.EnsureCreated();
-
             account = context.Account.FirstOrDefault(a => a.Username == "Jasper"); // should be sessioned account
 
-            //string wwwPath = this.environment.WebRootPath;
-            //string contentPath = this.environment.ContentRootPath;
-
             string path = Path.Combine(this.environment.WebRootPath, "Uploads");
-
+            
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
             List<Image> uploadedFiles = new List<Image>();
+
             foreach (IFormFile postedFile in postedFiles)
             {
                 string fileName = Path.GetFileName(postedFile.FileName);
@@ -65,8 +63,6 @@ namespace Grilled.Controllers
                     uploadedFiles.Add(new Image()
                     { 
                         Name = fileName,
-                        Source = path,
-                        Src = @$"Uploads/{fileName}"
                     });
                 }
             }

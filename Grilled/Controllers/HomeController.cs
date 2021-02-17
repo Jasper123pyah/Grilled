@@ -22,16 +22,21 @@ namespace Grilled.Controllers
             _logger = logger;
             context = _context;
         }
+        public string GetImagePath(string filename)
+        {
+            return @"https://" + Request.Host.ToString() + @"/Uploads/" + filename;
+        }
 
         [HttpGet]
         public IActionResult Index()
         {
             context.Database.EnsureCreated();
             display.Products = new List<ProductModel>();
-
+            
             foreach (ProductModel product in context.Product)
             {
                 ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+                productAdd.Images[0].Source = GetImagePath(productAdd.Images[0].Name);
                 display.Products.Add(productAdd);
             }
 

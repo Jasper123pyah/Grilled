@@ -72,7 +72,10 @@ namespace Grilled.Controllers
                 return View(new RegistrationModel());
             }
         }
-
+        public string GetImagePath(string filename)
+        {
+            return @"https://" + Request.Host.ToString() + @"/Uploads/" + filename;
+        }
         public ActionResult Messages()
         {
             return View();
@@ -84,11 +87,13 @@ namespace Grilled.Controllers
 
             account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
             
+
             display.Products = new List<ProductModel>();
 
             foreach (ProductModel product in account.Products)
             {
                 ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+                productAdd.Images[0].Source = GetImagePath(productAdd.Images[0].Name);
                 display.Products.Add(productAdd);
             }
 
