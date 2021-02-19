@@ -10,6 +10,7 @@ using Microsoft.AspNetCore;
 using Grilled.Models;
 using Grilled.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Grilled.Controllers
 {
@@ -20,14 +21,22 @@ namespace Grilled.Controllers
         private readonly GrilledContext context;
         private IWebHostEnvironment environment;
 
+        public string GetImagePath()
+        {
+            return @"https://" + Request.Host.ToString() + @"/Uploads/";
+        }
+
         public ProductController(GrilledContext _context, IWebHostEnvironment _environment)
         {
             context = _context;
             environment = _environment;
         }
+
         public ActionResult Details(ProductModel product)
         {
-            return View(product);
+            ProductModel model = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+            model.Images[0].Source = GetImagePath() + model.Images[0].Name;
+            return View(model);
         }
         public ActionResult Sell()
         {

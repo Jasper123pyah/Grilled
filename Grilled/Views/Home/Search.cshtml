@@ -1,6 +1,11 @@
 ﻿@model DisplayProductModel
 
 @using Grilled.Controllers;
+
+@if (Model.Products.Count == 0)
+{
+    <h4>There are no listings for your search</h4>
+}
 <div class="text-center">
     <div class="card-columns">
         @foreach (ProductModel product in Model.Products)
@@ -33,4 +38,3 @@
         }
     </div>
 </div>
-

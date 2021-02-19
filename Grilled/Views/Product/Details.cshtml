@@ -1,71 +1,37 @@
-﻿@model Grilled.Models.ProductModel
+﻿@model ProductModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>ProductModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Designer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Designer)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Size)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Size)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Color)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Condition)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Condition)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Shipping)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Shipping)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="col-7">
+        <img src="@Model.Images[0].Source" class="img-fluid" style="max-width: 100%; height: auto;"/>
+    </div>
+    <div class="col-1"></div>
+    <div class="col">
+        <h3 class="font-weight-bold">@Model.Name</h3>
+        <a> 
+            <h4 class="font-weight-bold"><u>@Model.Designer</u></h4>
+        </a>
+        <hr />
+        <p><b>Size:</b> @Model.Size</p>
+        <p><b>Color:</b> @Model.Color</p>
+        <p><b>Condition:</b> @Model.Condition</p>
+        <hr />
+        <h5 class="font-weight-bold">$@Model.Price</h5>
+        <p style="font-size:90%;"><b>+$@Model.Shipping</b> Shipping</p>
+        <hr />
+        <h5 class="font-weight-bold">Description</h5>
+        <p>@Model.Description</p>
+        <hr />
+        <button class="btn btn-dark" style="width:100%; max-height:20%; "> PURCHASE</button>
+        <br />  <br />
+        <button class="btn btn-outline-dark" style="width:100%; max-height:20%">OFFER</button>
+        <br /> <br />
+        <button class="btn btn-outline-dark" style="width:100%; max-height:20%">MESSAGE</button>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <button class="btn btn-secondary" asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
 </div>

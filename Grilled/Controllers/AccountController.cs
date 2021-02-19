@@ -16,18 +16,38 @@ namespace Grilled.Controllers
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
         DisplayProductModel display = new DisplayProductModel();
+        public string GetImagePath()
+        {
+            return @"https://" + Request.Host.ToString() + @"/Uploads/";
+        }
 
         public AccountController(GrilledContext _context, IWebHostEnvironment _environment)
         {
             context = _context;
         }
 
-        // GET: AccountController
         public ActionResult Index()
         {
             return RedirectToAction("Login");
         }
         public ActionResult Login()
+        {
+            return View();
+        }
+
+        public ActionResult Favorite()
+        {
+            return View();
+        }
+        public ActionResult Register()
+        {
+            return View();
+        }
+        public ActionResult Settings()
+        {
+            return View();
+        }
+        public ActionResult Messages()
         {
             return View();
         }
@@ -43,10 +63,6 @@ namespace Grilled.Controllers
                 return View(login);
             }
             return View(new LoginModel());
-        }
-        public ActionResult Register()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -72,14 +88,6 @@ namespace Grilled.Controllers
                 return View(new RegistrationModel());
             }
         }
-        public string GetImagePath(string filename)
-        {
-            return @"https://" + Request.Host.ToString() + @"/Uploads/" + filename;
-        }
-        public ActionResult Messages()
-        {
-            return View();
-        }
 
         public ActionResult Items()
         {
@@ -92,17 +100,11 @@ namespace Grilled.Controllers
 
             foreach (ProductModel product in account.Products)
             {
-                ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
-                productAdd.Images[0].Source = GetImagePath(productAdd.Images[0].Name);
-                display.Products.Add(productAdd);
+                display.AddToDisplay(product, context, GetImagePath());
             }
 
             return View(display);
         }
 
-        public ActionResult Settings()
-        {
-            return View();
-        }
     }
 }

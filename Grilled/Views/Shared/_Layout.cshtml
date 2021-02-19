@@ -22,19 +22,19 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <form class="form-inline my-2 my-lg-0">
+                <form class="form-inline my-2 my-lg-0" method="get" enctype="multipart/form-data" asp-controller="Home" asp-action="Search">
                     <div class="input-group" >
-                        <input type="text" class="form-control" placeholder="Search">
-                        <select class="form-control search-sl">
-                            <option>All Categories</option>
-                            <option>Top</option>
-                            <option>Bottom</option>
-                            <option>Footwear</option>
-                            <option>Outerwear</option>
-                            <option>Accessoires</option>
+                        <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+                        <select class="form-control search-sl" id="category" name="category">
+                            <option value="All Categories">All Categories</option>
+                            <option value="Top">Top</option>
+                            <option value="Bottom">Bottom</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Outerwear">Outerwear</option>
+                            <option value="Accessoires">Accessoires</option>
                         </select>
                         <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button" id="button-addon2">Search</button>
+                            <button class="btn btn-secondary" type="submit" value="Submit">Search</button>
                         </div>
                     </div>
                 </form>

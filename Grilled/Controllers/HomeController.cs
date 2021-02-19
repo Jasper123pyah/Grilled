@@ -17,14 +17,15 @@ namespace Grilled.Controllers
         private readonly GrilledContext context;
         DisplayProductModel display = new DisplayProductModel();
 
+        public string GetImagePath()
+        {
+            return @"https://" + Request.Host.ToString() + @"/Uploads/";
+        }
+
         public HomeController(ILogger<HomeController> logger, GrilledContext _context)
         {
             _logger = logger;
             context = _context;
-        }
-        public string GetImagePath(string filename)
-        {
-            return @"https://" + Request.Host.ToString() + @"/Uploads/" + filename;
         }
 
         [HttpGet]
@@ -32,17 +33,59 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
             display.Products = new List<ProductModel>();
-            
+            string path = GetImagePath();
             foreach (ProductModel product in context.Product)
             {
-                ProductModel productAdd = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
-                productAdd.Images[0].Source = GetImagePath(productAdd.Images[0].Name);
-                display.Products.Add(productAdd);
+                display.AddToDisplay(product, context, path);
             }
 
             return View(display);
         }
 
+        public IActionResult Search(string search, string category)
+        {
+            context.Database.EnsureCreated();
+            display.Products = new List<ProductModel>();
+            
+            if (category == "All Categories")
+            {
+                if(search == null)
+                {
+                    foreach (ProductModel product in context.Product)
+                    {
+                        display.AddToDisplay(product, context, GetImagePath());
+                    }
+                }
+                else
+                {
+                    foreach (ProductModel product in context.Product)
+                    {
+                        if (product.Name.ToLower().Contains(search.ToLower()) || product.Designer.ToLower().Contains(search.ToLower()) || product.Description.ToLower().Contains(search.ToLower()))
+                        {
+                            display.AddToDisplay(product, context, GetImagePath());
+                        }
+                    }
+                }                  
+            }
+            else
+            {
+                foreach (ProductModel product in context.Product)
+                {
+                    if (product.Category == category)
+                    {
+                        if(search == null)
+                        {
+                            display.AddToDisplay(product, context, GetImagePath());
+                        }    
+                        else if (product.Name.ToLower().Contains(search.ToLower()) || product.Designer.ToLower().Contains(search.ToLower()) || product.Description.ToLower().Contains(search.ToLower()))
+                        {
+                            display.AddToDisplay(product, context, GetImagePath());
+                        }
+                    }
+                }
+            }
+            return View(display);
+        }
         public IActionResult Privacy()
         {
             return View();
