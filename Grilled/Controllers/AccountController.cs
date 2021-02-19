@@ -16,6 +16,7 @@ namespace Grilled.Controllers
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
         DisplayProductModel display = new DisplayProductModel();
+
         public string GetImagePath()
         {
             return @"https://" + Request.Host.ToString() + @"/Uploads/";
@@ -34,19 +35,55 @@ namespace Grilled.Controllers
         {
             return View();
         }
-
-        public ActionResult Favorite()
-        {
-            return View();
-        }
         public ActionResult Register()
         {
             return View();
         }
+
+        public ActionResult Favorite()
+        {
+            context.Database.EnsureCreated();
+
+            account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
+
+            display.Products = new List<ProductModel>();
+
+            if (account.Favorites == null)
+                account.Favorites = new List<FavoriteModel>();
+
+            foreach (FavoriteModel favorite in account.Favorites)
+            {
+                ProductModel product = context.Product.Where(p => p.Id == favorite.ProductId).Include(a => a.Images).FirstOrDefault();
+                display.AddToDisplay(product, context, GetImagePath());
+            }
+
+            return View(display);
+        }
+
+        public ActionResult Save(ProductModel product)
+        {
+            context.Database.EnsureCreated();
+            account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
+
+            if (account.Favorites.Contains(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault()))
+            {
+                context.Favorite.Remove(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault());
+                context.SaveChanges();
+                return RedirectToAction("Favorite");
+            }
+            else
+            {
+                FavoriteModel favorite = new FavoriteModel() { ProductId = product.Id };
+                favorite.AddFav(context, account);
+                return RedirectToAction("Favorite");
+            }
+        }
+
         public ActionResult Settings()
         {
             return View();
         }
+
         public ActionResult Messages()
         {
             return View();

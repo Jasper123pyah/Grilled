@@ -27,7 +27,7 @@
                     <p style="text-align:left;">
                         $@product.Price
                         <span style="float:right;">
-                            <a asp-area="" asp-controller="Account" asp-action="Save">
+                            <a asp-area="" asp-controller="Account" asp-action="Save" asp-route-id="@product.Id">
                                 <img src="~/Images/Heart.png" width="20" height="20">
                             </a>
                         </span>
@@ -36,5 +36,4 @@
             </div>
         }
     </div>
-
 </div>

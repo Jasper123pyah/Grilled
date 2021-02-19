@@ -23,7 +23,7 @@ $(document).ready(function () {
         }
         else if (val == "Accessoires")
         {
-            $("#size").html("<option value='OS'>One Size</option>");
+            $("#size").html("<option value='One Size'>One Size</option>");
         }
     });
 });

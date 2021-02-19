@@ -13,5 +13,6 @@ namespace Grilled.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public List<ProductModel> Products { get; set; }
+        public List<FavoriteModel> Favorites { get; set; }
     }
 }
