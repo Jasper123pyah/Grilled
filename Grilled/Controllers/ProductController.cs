@@ -51,7 +51,9 @@ namespace Grilled.Controllers
         public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
         {
             context.Database.EnsureCreated();
-            account = context.Account.FirstOrDefault(a => a.Username == "Jasper"); // should be sessioned account
+
+            string loginId = HttpContext.Request.Cookies["Login"];
+            account = context.Account.FirstOrDefault(a => a.Username == loginId);
 
             string path = Path.Combine(this.environment.WebRootPath, "Uploads");
             

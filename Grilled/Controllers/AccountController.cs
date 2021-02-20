@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using Grilled.Data;
 using Grilled.Models;
 using Microsoft.AspNetCore.Hosting;
+using System.Runtime;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Grilled.Controllers
 {
     public class AccountController : Controller
-    {
+    { 
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
         DisplayProductModel display = new DisplayProductModel();
@@ -29,10 +32,20 @@ namespace Grilled.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("Login");
+            if(HttpContext.Request.Cookies["Login"] == null)
+                return RedirectToAction("Login");
+            else
+            {
+                return View();
+            }
         }
         public ActionResult Login()
         {
+            if(HttpContext.Request.Cookies["Login"] != null)
+            {
+                HttpContext.Response.Cookies.Delete("Login");
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
         public ActionResult Register()
@@ -44,7 +57,7 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
+            account = context.Account.Where(a => a.Username == HttpContext.Request.Cookies["Login"]).Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); 
 
             display.Products = new List<ProductModel>();
 
@@ -63,20 +76,18 @@ namespace Grilled.Controllers
         public ActionResult Save(ProductModel product)
         {
             context.Database.EnsureCreated();
-            account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
-
+            account = context.Account.Where(a => a.Username == HttpContext.Request.Cookies["Login"]).Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
+            
             if (account.Favorites.Contains(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault()))
-            {
                 context.Favorite.Remove(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault());
-                context.SaveChanges();
-                return RedirectToAction("Favorite");
-            }
+
             else
             {
                 FavoriteModel favorite = new FavoriteModel() { ProductId = product.Id };
-                favorite.AddFav(context, account);
-                return RedirectToAction("Favorite");
+                favorite.AddFavToAccount(account);
             }
+            context.SaveChanges();
+            return RedirectToAction("Favorite");
         }
 
         public ActionResult Settings()
@@ -97,7 +108,8 @@ namespace Grilled.Controllers
             account = context.Account.FirstOrDefault(a => a.Username == login.Username);
             if (account != null && login.Password == account.Password)
             {
-                return View(login);
+                HttpContext.Response.Cookies.Append("Login", account.Username);
+                return RedirectToAction("Items","Account");
             }
             return View(new LoginModel());
         }
@@ -130,10 +142,14 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            account = context.Account.Where(a => a.Username == "Jasper").Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(); // should be sessioned account
-            
+            string loginId = HttpContext.Request.Cookies["Login"];
 
+            account = context.Account.Where(a => a.Username == loginId).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
+            
             display.Products = new List<ProductModel>();
+
+            if (account == null)
+                return View(display);
 
             foreach (ProductModel product in account.Products)
             {

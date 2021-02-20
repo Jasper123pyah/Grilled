@@ -2,11 +2,11 @@
 
 @using Grilled.Controllers;
 
-@if (Model.Products.Count == 0)
-{
-    <h4>There are no listings for your search.</h4>
-}
 <div class="text-center">
+    @if (Model.Products.Count == 0)
+    {
+        <h4>There are no listings for your search.</h4>
+    }
     <div class="card-columns">
         @foreach (ProductModel product in Model.Products)
         {
@@ -19,7 +19,7 @@
                     <h5 style="text-align:left;">
                         @product.Designer
                         <span style="float:right;">
-                            @product.Size
+                            @product.Size.Split('/').First()
                         </span>
                     </h5>
 
