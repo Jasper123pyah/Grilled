@@ -61,8 +61,11 @@ namespace Grilled.Controllers
 
             display.Products = new List<ProductModel>();
 
+            if (account == null)
+                return View(display);
+
             if (account.Favorites == null)
-                account.Favorites = new List<FavoriteModel>();
+                return View(display);
 
             foreach (FavoriteModel favorite in account.Favorites)
             {
@@ -92,7 +95,7 @@ namespace Grilled.Controllers
 
         public ActionResult Settings()
         {
-            return View();
+            return PartialView("Settings");
         }
 
         public ActionResult Messages()
@@ -142,9 +145,7 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            string loginId = HttpContext.Request.Cookies["Login"];
-
-            account = context.Account.Where(a => a.Username == loginId).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
+            account = context.Account.Where(a => a.Username == HttpContext.Request.Cookies["Login"]).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
             
             display.Products = new List<ProductModel>();
 
@@ -155,8 +156,8 @@ namespace Grilled.Controllers
             {
                 display.AddToDisplay(product, context, GetImagePath());
             }
-
             return View(display);
+            //return PartialView("Items", display);
         }
 
     }

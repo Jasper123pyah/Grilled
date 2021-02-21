@@ -1,5 +1,17 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<h1 class="display-4"><b>@Context.Request.Cookies["Login"]</b></h1>
+<hr />
+<div class="row">
+    <div class="col-2">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
+            <a class="list-group-item list-group-item-action list-group-item-light"><s>My Sizes</s></a>
+            <a class="list-group-item list-group-item-action list-group-item-light"><s>Transactions</s></a>
+            <a class="list-group-item list-group-item-action list-group-item-danger" asp-area="" asp-controller="Account" asp-action="Login">Log Out</a>
+        </div>
+    </div>
+    <div class="col-10">
+        Messages
+    </div>
+</div>

@@ -50,20 +50,17 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @if (Context.Request.Cookies["Login"] != null)
                             {
-                                <p class="dropdown-item">@Context.Request.Cookies["Login"]</p>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index"><b>@Context.Request.Cookies["Login"]</b></a>
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item alert-danger" asp-area="" asp-controller="Account" asp-action="Login">Log Out</a>
                             }
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
-                            <div class="dropdown-divider"></div>
                             @if (Context.Request.Cookies["Login"] == null)
                             {
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            }
-                            @if (Context.Request.Cookies["Login"] != null)
-                            {
-                                <a class="dropdown-item alert-danger" asp-area="" asp-controller="Account" asp-action="Login">Log Out</a>
                             }
                         </div>
                     </div>

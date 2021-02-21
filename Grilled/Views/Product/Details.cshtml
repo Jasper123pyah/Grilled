@@ -7,12 +7,12 @@
 
 <div class="row">
     <div class="col-7">
-        <img src="@Model.Images[0].Source" class="img-fluid" style="max-width: 100%; height: auto;"/>
+        <img src="@Model.Images[0].Source" class="img-fluid" style="max-width: 100%; height: auto;" />
     </div>
     <div class="col-1"></div>
     <div class="col">
         <h3 class="font-weight-bold">@Model.Name</h3>
-        <a> 
+        <a>
             <h4 class="font-weight-bold"><u>@Model.Designer</u></h4>
         </a>
         <hr />
@@ -33,6 +33,10 @@
         <button class="btn btn-outline-dark" style="width:100%; max-height:20%">MESSAGE</button>
     </div>
 </div>
-<div>
-    <button class="btn btn-secondary" asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
-</div>
+@if (Model.OwnerName == Context.Request.Cookies["Login"])
+{
+    <div>
+        <a class="btn btn-secondary" asp-area="" asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    </div>
+}
+

@@ -42,9 +42,30 @@ namespace Grilled.Controllers
         {
             return View();
         }
-        public ActionResult Edit()
+        public ActionResult Edit(ProductModel product)
         {
-            return View();
+            ProductModel model = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+            model.Images[0].Source = GetImagePath() + model.Images[0].Name;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Change(ProductModel product)
+        {
+            context.Database.EnsureCreated();
+
+            ProductModel model = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
+            model.Images[0].Source = GetImagePath() + model.Images[0].Name;
+            account = context.Account.FirstOrDefault(a => a.Username == model.OwnerName);
+
+            model.Name = product.Name;
+            model.Condition = product.Condition;
+            model.Description = product.Description;
+            model.Price = product.Price;
+            model.Shipping = product.Shipping;
+
+            context.SaveChanges();
+            return RedirectToAction("Items", "Account");
         }
 
         [HttpPost]
@@ -52,8 +73,7 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            string loginId = HttpContext.Request.Cookies["Login"];
-            account = context.Account.FirstOrDefault(a => a.Username == loginId);
+            account = context.Account.FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
 
             string path = Path.Combine(this.environment.WebRootPath, "Uploads");
             
@@ -98,7 +118,8 @@ namespace Grilled.Controllers
                     Description = product.Description,
                     Price = product.Price,
                     Shipping = product.Shipping,
-                    Images = uploadedFiles
+                    Images = uploadedFiles,
+                    OwnerName = account.Username
                 });
                 context.SaveChanges();
 

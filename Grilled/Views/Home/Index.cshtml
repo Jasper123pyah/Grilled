@@ -22,16 +22,16 @@
                         </span>
                     </h5>
 
-                    <p class="card-text">@product.Name</p>
+                    <div class="card-text">@product.Name</div>
 
-                    <p style="text-align:left;">
+                    <div style="text-align:left;">
                         $@product.Price
                         <span style="float:right;">
                             <a asp-area="" asp-controller="Account" asp-action="Save" asp-route-id="@product.Id">
                                 <img src="~/Images/Heart.png" width="20" height="20">
                             </a>
                         </span>
-                    </p>
+                    </div>
                 </div>
             </div>
         }

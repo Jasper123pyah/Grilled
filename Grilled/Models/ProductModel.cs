@@ -29,6 +29,7 @@ namespace Grilled.Models
         public string Shipping { get; set; }
         [Required]
         public List<Image> Images { get; set; }
+        public string OwnerName { get; set; }
 
     }
 }
