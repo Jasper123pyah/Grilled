@@ -42,6 +42,8 @@ namespace Grilled.Controllers
         {
             return View();
         }
+
+        [HttpGet]
         public ActionResult Edit(ProductModel product)
         {
             ProductModel model = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
@@ -54,8 +56,7 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            ProductModel model = context.Product.Where(p => p.Id == product.Id).Include(a => a.Images).FirstOrDefault();
-            model.Images[0].Source = GetImagePath() + model.Images[0].Name;
+            ProductModel model = context.Product.Where(p => p.Id == product.Id).FirstOrDefault();
             account = context.Account.FirstOrDefault(a => a.Username == model.OwnerName);
 
             model.Name = product.Name;
@@ -65,7 +66,7 @@ namespace Grilled.Controllers
             model.Shipping = product.Shipping;
 
             context.SaveChanges();
-            return RedirectToAction("Items", "Account");
+            return RedirectToAction("Details", "Product", model);
         }
 
         [HttpPost]

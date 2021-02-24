@@ -13,6 +13,8 @@ namespace Grilled.Data
         public DbSet<ProductModel> Product { get; set; }
         public DbSet<Image> Image { get; set; }
         public DbSet<FavoriteModel> Favorite { get; set; }
+        public DbSet<MessageModel> Message { get; set; }
+        public DbSet<ChatModel> Chat { get; set; }
         public GrilledContext(DbContextOptions options) : base(options) { }
     }
 }

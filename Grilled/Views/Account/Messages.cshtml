@@ -1,9 +1,11 @@
-﻿<h1 class="display-4"><b>@Context.Request.Cookies["Login"]</b></h1>
+﻿@model DisplayMessagesModel 
+
+<h1 class="display-4"><b>@Context.Request.Cookies["Login"]</b></h1>
 <hr />
 <div class="row">
     <div class="col-2">
         <div class="list-group">
-            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
+            <a class="list-group-item list-group-item-action list-group-item-secondary" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
             <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
             <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
             <a class="list-group-item list-group-item-action list-group-item-light"><s>My Sizes</s></a>
@@ -12,6 +14,33 @@
         </div>
     </div>
     <div class="col-10">
-        Messages
+        <div class="text-center">
+            <h1 class="display-4">MESSAGES</h1>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-3">
+                <div class="list-group">
+                    @if (Model.Chats != null)
+                    {
+                        @foreach (ChatModel chat in Model.Chats)
+                        {
+                            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Messages" asp-route-id=@chat.Id>Chat with </a>
+                        }
+                    }
+
+                </div>
+            </div>
+            <div class="col-9">
+                @if (Model.Chats != null)
+                {
+                    @foreach (MessageModel message in Model.Chats[0].Messages)
+                    {
+                        <div>@message.Message</div>
+                        <div>@message.Time</div>
+                    }
+                }
+            </div>
+        </div>
     </div>
 </div>

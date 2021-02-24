@@ -17,6 +17,7 @@ namespace Grilled.Controllers
     public class AccountController : Controller
     { 
         AccountModel account = new AccountModel();
+        ChatModel chat = new ChatModel();
         private readonly GrilledContext context;
         DisplayProductModel display = new DisplayProductModel();
 
@@ -81,7 +82,7 @@ namespace Grilled.Controllers
             context.Database.EnsureCreated();
             account = context.Account.Where(a => a.Username == HttpContext.Request.Cookies["Login"]).Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
             
-            if (account.Favorites.Contains(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault()))
+            if(account.Favorites.FirstOrDefault(a => a.ProductId == product.Id) != null)
                 context.Favorite.Remove(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault());
 
             else
@@ -95,12 +96,69 @@ namespace Grilled.Controllers
 
         public ActionResult Settings()
         {
-            return PartialView("Settings");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Send(string messagetext, string receivername)
+        {
+            context.Database.EnsureCreated();
+            account = context.Account.FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
+            AccountModel raccount = context.Account.FirstOrDefault(a => a.Username == receivername);
+            List<AccountModel> accounts = new List<AccountModel>() { account, raccount };
+
+            chat = context.Chat.Where(c => c.Id == $"{account.Username}_{raccount.Username}" || c.Id == $"{raccount.Username}_{account.Username}")
+                .Include(a => a.Messages).Include(a => a.Accounts).FirstOrDefault();
+
+            if(chat != null)
+            {         
+                chat.Messages.Add(new MessageModel()
+                {
+                    Message = messagetext,
+                    SenderName = account.Username,
+                    Time = DateTime.Now
+                });
+            }
+            else
+            {
+                chat = new ChatModel()
+                { 
+                    Id = $"{account.Username}_{raccount.Username}",
+                    Messages = new List<MessageModel>(),
+                    Accounts = new List<AccountModel>()
+                };
+
+                chat.Messages.Add(new MessageModel()
+                {
+                    Message = messagetext,
+                    SenderName = account.Username,
+                    Time = DateTime.Now
+                });
+
+                chat.Accounts = accounts;
+
+                context.Chat.Add(chat);
+            }
+            context.SaveChanges();
+
+            return RedirectToAction("Messages");
         }
 
         public ActionResult Messages()
         {
-            return View();
+            context.Database.EnsureCreated();
+            account = context.Account.FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
+
+            DisplayMessagesModel mdisplay = new DisplayMessagesModel();
+            mdisplay.Chats = new List<ChatModel>();
+
+            foreach (ChatModel chat in context.Chat.Include(a => a.Accounts).Include(a => a.Messages))
+            {
+                if(chat.Accounts.Contains(account))                   
+                    mdisplay.Chats.Add(chat);               
+            }
+
+            return View(mdisplay);
         }
 
         [HttpPost]
@@ -112,7 +170,7 @@ namespace Grilled.Controllers
             if (account != null && login.Password == account.Password)
             {
                 HttpContext.Response.Cookies.Append("Login", account.Username);
-                return RedirectToAction("Items","Account");
+                return RedirectToAction("Index");
             }
             return View(new LoginModel());
         }
@@ -157,7 +215,6 @@ namespace Grilled.Controllers
                 display.AddToDisplay(product, context, GetImagePath());
             }
             return View(display);
-            //return PartialView("Items", display);
         }
 
     }

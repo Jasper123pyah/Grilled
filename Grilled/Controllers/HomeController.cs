@@ -33,10 +33,10 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
             display.Products = new List<ProductModel>();
-            string path = GetImagePath();
+            
             foreach (ProductModel product in context.Product)
             {
-                display.AddToDisplay(product, context, path);
+                display.AddToDisplay(product, context, GetImagePath());
             }
 
             return View(display);

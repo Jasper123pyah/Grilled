@@ -1,6 +1,5 @@
 ﻿@model ProductModel
 
-
 @{
     ViewData["Title"] = "Details";
 }
@@ -26,17 +25,50 @@
         <h5 class="font-weight-bold">Description</h5>
         <p>@Model.Description</p>
         <hr />
-        <button class="btn btn-dark" style="width:100%; max-height:20%; "> PURCHASE</button>
-        <br />  <br />
-        <button class="btn btn-outline-dark" style="width:100%; max-height:20%">OFFER</button>
-        <br /> <br />
-        <button class="btn btn-outline-dark" style="width:100%; max-height:20%">MESSAGE</button>
+        @if (Model.OwnerName != Context.Request.Cookies["Login"] && Context.Request.Cookies["Login"] != null)
+        {
+            <button class="btn btn-dark" style="width:100%; max-height:20%; "> PURCHASE</button>
+            <br /> <br />
+            <button class="btn btn-outline-dark" style="width:100%; max-height:20%">OFFER</button>
+            <br /> <br />
+            <button type="button" class="btn btn-outline-dark" style="width:100%; max-height:20%" data-toggle="modal" data-target="#messageModal">MESSAGE</button>
+
+            <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Send a message</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form enctype="multipart/form-data" asp-controller="Account" asp-action="Send">
+                            <input type="hidden" name="receivername" id="receivername"  asp-for="@Model.OwnerName" />
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Message:</label>
+                                    <textarea class="form-control" name="messagetext" id="messagetext"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-secondary">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+        <h5><b>Seller:</b> @Model.OwnerName</h5>
+        @if (Model.OwnerName == Context.Request.Cookies["Login"])
+        {
+            <div>
+                <a class="btn btn-secondary" asp-area="" asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            </div>
+        }
     </div>
 </div>
-@if (Model.OwnerName == Context.Request.Cookies["Login"])
-{
-    <div>
-        <a class="btn btn-secondary" asp-area="" asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    </div>
-}
+
 

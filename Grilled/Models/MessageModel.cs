@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace Grilled.Models
 {
-    public class Image
+    public class MessageModel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Source { get; set; }
+        public string Message {get; set;}
+        public string SenderName { get; set; }
+        public DateTime Time { get; set; }
     }
 }

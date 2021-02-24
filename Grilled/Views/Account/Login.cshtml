@@ -24,6 +24,17 @@
                 <input type="submit" value="Login" class="btn btn-secondary" />
             </div>
         </form>
+        @if (Model != null)
+        {
+            if (Model.Username != null)
+            {
+                <p1>Login succes</p1>
+            }
+            else
+            {
+                <p1 style="color:red">Login Failed</p1>
+            }
+        }
         <br />
         <a asp-action="Register">
             <div class="btn btn-secondary">Register</div>
@@ -31,14 +42,4 @@
     </div>
 </div>
 
-@if (Model != null)
-{
-    if (Model.Username != null)
-    {
-        <p1>Login succes</p1>
-    }
-    else
-    {
-        <p1 style="color:red">Login Failed</p1>
-    }
-}
+
