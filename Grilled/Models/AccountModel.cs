@@ -13,5 +13,7 @@ namespace Grilled.Models
         public string Email { get; set; }
         public List<ProductModel> Products { get; set; }
         public List<FavoriteModel> Favorites { get; set; }
+        public List<ChatModel> SellChats { get; set; }
+        public List<ChatModel> BuyChats { get; set; }
     }
 }

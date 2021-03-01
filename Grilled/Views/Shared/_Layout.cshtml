@@ -23,7 +23,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <form class="form-inline my-2 my-lg-0" method="get" enctype="multipart/form-data" asp-controller="Home" asp-action="Search">
-                    <div class="input-group" >
+                    <div class="input-group">
                         <input type="text" class="form-control" id="search" name="search" placeholder="Search">
                         <select class="form-control search-sl" id="category" name="category">
                             <option value="All Categories">All Categories</option>
@@ -52,7 +52,7 @@
                             {
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index"><b>@Context.Request.Cookies["Login"]</b></a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Messages">Messages</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="BuyMessages">Messages</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
                                 <div class="dropdown-divider"></div>

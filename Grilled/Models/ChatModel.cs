@@ -7,8 +7,9 @@ namespace Grilled.Models
 {
     public class ChatModel
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+        public string Users { get; set; }
+        public Guid ProductId { get; set; }
         public List<MessageModel> Messages { get; set; }
-        public List<AccountModel> Accounts { get; set; }
     }
 }

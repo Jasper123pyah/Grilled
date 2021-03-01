@@ -100,15 +100,17 @@ namespace Grilled.Controllers
         }
 
         [HttpPost]
-        public ActionResult Send(string messagetext, string receivername)
+        public ActionResult StartChat(string messagetext, string receivername, Guid productId)
         {
             context.Database.EnsureCreated();
             account = context.Account.FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
             AccountModel raccount = context.Account.FirstOrDefault(a => a.Username == receivername);
-            List<AccountModel> accounts = new List<AccountModel>() { account, raccount };
+            
 
-            chat = context.Chat.Where(c => c.Id == $"{account.Username}_{raccount.Username}" || c.Id == $"{raccount.Username}_{account.Username}")
-                .Include(a => a.Messages).Include(a => a.Accounts).FirstOrDefault();
+            chat = context.Chat.Where(c => c.Users == $"{account.Username}_{raccount.Username}" 
+                                        || c.Users == $"{raccount.Username}_{account.Username}" 
+                                        && c.ProductId == productId)
+                                        .Include(a => a.Messages).FirstOrDefault();
 
             if(chat != null)
             {         
@@ -122,10 +124,10 @@ namespace Grilled.Controllers
             else
             {
                 chat = new ChatModel()
-                { 
-                    Id = $"{account.Username}_{raccount.Username}",
-                    Messages = new List<MessageModel>(),
-                    Accounts = new List<AccountModel>()
+                {
+                    ProductId = productId,
+                    Users = $"{account.Username}_{raccount.Username}",
+                    Messages = new List<MessageModel>()
                 };
 
                 chat.Messages.Add(new MessageModel()
@@ -135,28 +137,117 @@ namespace Grilled.Controllers
                     Time = DateTime.Now
                 });
 
-                chat.Accounts = accounts;
+                if (account.BuyChats != null)
+                    account.BuyChats.Add(chat);
+                else
+                    account.BuyChats = new List<ChatModel>() { chat };
 
+                if (raccount.SellChats != null)
+                    raccount.SellChats.Add(chat);
+                else
+                    raccount.SellChats = new List<ChatModel> { chat };
                 context.Chat.Add(chat);
             }
             context.SaveChanges();
 
-            return RedirectToAction("Messages");
+            return RedirectToAction("BuyMessages");
         }
 
-        public ActionResult Messages()
+        [HttpPost]
+        public ActionResult BuySend(string message, Guid messageId)
         {
             context.Database.EnsureCreated();
-            account = context.Account.FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
 
-            DisplayMessagesModel mdisplay = new DisplayMessagesModel();
-            mdisplay.Chats = new List<ChatModel>();
+            MessageModel searchmessage = context.Message.FirstOrDefault(a => a.Id == messageId);
+            ChatModel chat = context.Chat.Include(a => a.Messages).FirstOrDefault(a => a.Messages.Contains(searchmessage));
 
-            foreach (ChatModel chat in context.Chat.Include(a => a.Accounts).Include(a => a.Messages))
+            if (chat != null)
             {
-                if(chat.Accounts.Contains(account))                   
-                    mdisplay.Chats.Add(chat);               
+                chat.Messages.Add(new MessageModel()
+                {
+                    Message = message,
+                    SenderName = HttpContext.Request.Cookies["Login"],
+                    Time = DateTime.Now
+                });
             }
+            context.SaveChanges();
+
+            return RedirectToAction("BuyMessages", chat);
+        }
+        [HttpPost]
+        public ActionResult SellSend(string message, Guid messageId)
+        {
+            context.Database.EnsureCreated();
+
+            MessageModel searchmessage = context.Message.FirstOrDefault(a => a.Id == messageId);
+            ChatModel chat = context.Chat.Include(a => a.Messages).FirstOrDefault(a => a.Messages.Contains(searchmessage));
+
+            if (chat != null)
+            {
+                chat.Messages.Add(new MessageModel()
+                {
+                    Message = message,
+                    SenderName = HttpContext.Request.Cookies["Login"],
+                    Time = DateTime.Now
+                });
+            }
+            context.SaveChanges();
+
+            return RedirectToAction("SellMessages", chat);
+        }
+
+        public ActionResult BuyMessages(ChatModel chat)
+        {
+            context.Database.EnsureCreated();
+            account = context.Account.Include(a => a.BuyChats).ThenInclude(a => a.Messages)
+                                     .FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
+
+            DisplayMessagesModel mdisplay = new DisplayMessagesModel
+            {
+                Chats = account.BuyChats,
+                Messages = new List<MessageModel>()
+            };
+
+            if (chat != null)
+            {
+                ChatModel selectedchat = context.Chat.Include(c => c.Messages).FirstOrDefault(c => c.Id == chat.Id);
+                if (selectedchat != null)
+                {
+                    foreach (MessageModel message in selectedchat.Messages)
+                    {
+                        mdisplay.Messages.Add(message);
+                    }
+                    mdisplay.Messages = mdisplay.Messages.OrderBy(x => x.Time).ToList();
+                }
+            }
+
+            return View(mdisplay);
+        }
+
+        public ActionResult SellMessages(ChatModel chat)
+        {
+            context.Database.EnsureCreated();
+            account = context.Account.Include(a => a.SellChats).ThenInclude(a => a.Messages)
+                                     .FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
+
+            DisplayMessagesModel mdisplay = new DisplayMessagesModel
+            {
+                Chats = account.SellChats,
+                Messages = new List<MessageModel>()
+            };
+            if (chat != null)
+            {
+                ChatModel selectedchat = context.Chat.Include(c => c.Messages).FirstOrDefault(c => c.Id == chat.Id);
+                if (selectedchat != null)
+                {
+                    foreach (MessageModel message in selectedchat.Messages)
+                    {
+                        mdisplay.Messages.Add(message);
+                    }
+                    mdisplay.Messages = mdisplay.Messages.OrderBy(x => x.Time).ToList();
+                }
+            }
+
 
             return View(mdisplay);
         }
@@ -203,7 +294,7 @@ namespace Grilled.Controllers
         {
             context.Database.EnsureCreated();
 
-            account = context.Account.Where(a => a.Username == HttpContext.Request.Cookies["Login"]).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
+            account = context.Account.Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
             
             display.Products = new List<ProductModel>();
 

@@ -1,6 +1,8 @@
 ﻿@model DisplayProductModel
 
-@using Grilled.Controllers;
+@{
+    ViewData["Title"] = "Search";
+}
 
 <div class="text-center">
     @if (Model.Products.Count == 0)

@@ -20,7 +20,7 @@
         <p><b>Condition:</b> @Model.Condition</p>
         <hr />
         <h5 class="font-weight-bold">$@Model.Price</h5>
-        <p style="font-size:90%;"><b>+$@Model.Shipping</b> Shipping</p>
+        <p style="font-size:90%;"><b>+$@Model.Shipping</b> Estimated Shipping</p>
         <hr />
         <h5 class="font-weight-bold">Description</h5>
         <p>@Model.Description</p>
@@ -42,8 +42,9 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form enctype="multipart/form-data" asp-controller="Account" asp-action="Send">
-                            <input type="hidden" name="receivername" id="receivername"  asp-for="@Model.OwnerName" />
+                        <form enctype="multipart/form-data" asp-controller="Account" asp-action="StartChat">
+                            <input type="hidden" name="receivername" id="receivername" asp-for="@Model.OwnerName" />
+                            <input type="hidden" name="productId" id="productId" asp-for="@Model.Id" />
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Message:</label>
