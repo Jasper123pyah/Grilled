@@ -1,4 +1,4 @@
-﻿@model ProductModel
+﻿@model GrilledCommon.Models.ProductModel
 
 @{
     ViewData["Title"] = "Details";
@@ -27,14 +27,14 @@
         <hr />
         @if (Model.OwnerName != Context.Request.Cookies["Login"] && Context.Request.Cookies["Login"] != null)
         {
-            <button class="btn btn-dark" style="width:100%; max-height:20%; "> PURCHASE</button>
+            <button class="btn btn-dark" style="width:100%; max-height:20%;">PURCHASE</button>
             <br /> <br />
             <button class="btn btn-outline-dark" style="width:100%; max-height:20%">OFFER</button>
             <br /> <br />
             <button type="button" class="btn btn-outline-dark" style="width:100%; max-height:20%" data-toggle="modal" data-target="#messageModal">MESSAGE</button>
 
             <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Send a message</h5>
@@ -42,7 +42,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form enctype="multipart/form-data" asp-controller="Account" asp-action="StartChat">
+                        <form enctype="multipart/form-data" asp-controller="Chat" asp-action="StartChat">
                             <input type="hidden" name="receivername" id="receivername" asp-for="@Model.OwnerName" />
                             <input type="hidden" name="productId" id="productId" asp-for="@Model.Id" />
                             <div class="modal-body">

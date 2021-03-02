@@ -1,11 +1,11 @@
-﻿@model DisplayProductModel
+﻿@model GrilledCommon.Models.DisplayProductModel
 
 <h1 class="display-4"><b>@Context.Request.Cookies["Login"]</b></h1>
 <hr />
 <div class="row">
     <div class="col-2">
         <div class="list-group">
-            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="BuyMessages">Messages</a>
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Chat" asp-action="BuyMessages">Messages</a>
             <a class="list-group-item list-group-item-action list-group-item-secondary" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
             <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
             <a class="list-group-item list-group-item-action list-group-item-light"><s>My Sizes</s></a>
@@ -22,7 +22,7 @@
                 <h4>You have no listings yet.</h4>
             }
             <div class="card-columns">
-                @foreach (ProductModel product in Model.Products)
+                @foreach (GrilledCommon.Models.ProductModel product in Model.Products)
                 {
                     <div class="card" style="width: 18rem;">
                         <a asp-area="" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">

@@ -1,4 +1,4 @@
-﻿@model DisplayProductModel
+﻿@model GrilledCommon.Models.DisplayProductModel
 
 @{
     ViewData["Title"] = "Search";
@@ -10,7 +10,7 @@
         <h4>There are no listings for your search.</h4>
     }
     <div class="card-columns">
-        @foreach (ProductModel product in Model.Products)
+        @foreach (GrilledCommon.Models.ProductModel product in Model.Products)
         {
             <div class="card" style="width: 18rem;">
                 <a asp-area="" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">

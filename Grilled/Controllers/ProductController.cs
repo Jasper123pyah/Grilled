@@ -7,8 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore;
-using Grilled.Models;
-using Grilled.Data;
+using GrilledCommon.Models;
+using GrilledData.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,11 +20,7 @@ namespace Grilled.Controllers
         AccountModel account = new AccountModel();
         private readonly GrilledContext context;
         private IWebHostEnvironment environment;
-
-        public string GetImagePath()
-        {
-            return @"https://" + Request.Host.ToString() + @"/Uploads/";
-        }
+        GrilledLogic.Product productLogic = new GrilledLogic.Product();
 
         public ProductController(GrilledContext _context, IWebHostEnvironment _environment)
         {
@@ -32,11 +28,14 @@ namespace Grilled.Controllers
             environment = _environment;
         }
 
+        public ActionResult DeleteProduct(ProductModel product)
+        {
+            productLogic.Delete(product, context);
+            return RedirectToAction("Items", "Account");
+        }
         public ActionResult Details(ProductModel product)
         {
-            ProductModel model = context.Product.Include(a => a.Images).FirstOrDefault(p => p.Id == product.Id);
-            model.Images[0].Source = GetImagePath() + model.Images[0].Name;
-            return View(model);
+            return View(productLogic.Details(product, HttpContext, context));
         }
         public ActionResult Sell()
         {
@@ -46,90 +45,23 @@ namespace Grilled.Controllers
         [HttpGet]
         public ActionResult Edit(ProductModel product)
         {
-            ProductModel model = context.Product.Include(a => a.Images).FirstOrDefault(p => p.Id == product.Id);
-            model.Images[0].Source = GetImagePath() + model.Images[0].Name;
-            return View(model);
+            return View(productLogic.Edit(product, HttpContext, context));
         }
 
         [HttpPost]
         public ActionResult Change(ProductModel product)
-        {
-            context.Database.EnsureCreated();
-
-            ProductModel model = context.Product.FirstOrDefault(p => p.Id == product.Id);
-            account = context.Account.FirstOrDefault(a => a.Username == model.OwnerName);
-
-            model.Name = product.Name;
-            model.Condition = product.Condition;
-            model.Description = product.Description;
-            model.Price = product.Price;
-            model.Shipping = product.Shipping;
-
-            context.SaveChanges();
-            return RedirectToAction("Details", "Product", model);
+        {     
+            return RedirectToAction("Details", "Product", productLogic.Change(product, context));
         }
 
         [HttpPost]
         public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
         {
-            context.Database.EnsureCreated();
-
-            account = context.Account.FirstOrDefault(a => a.Username == HttpContext.Request.Cookies["Login"]);
-
-            string path = Path.Combine(this.environment.WebRootPath, "Uploads");
-            
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            List<Image> uploadedFiles = new List<Image>();
-
-            foreach (IFormFile postedFile in postedFiles)
-            {
-                if (postedFile.FileName.EndsWith(".jpg") || postedFile.FileName.EndsWith(".png"))
-                {
-                    string fileName = Path.GetFileName(postedFile.FileName);
-                    using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                    {
-                        postedFile.CopyTo(stream);
-                        uploadedFiles.Add(new Image()
-                        {
-                            Name = fileName,
-                        });
-                    }
-                }
-                else
-                    return View();
-            }
-
-            if (account != null)
-            {
-                if (account.Products == null)
-                    account.Products = new List<ProductModel>();
-
-                account.Products.Add(new ProductModel()
-                {
-                    Name = product.Name,
-                    Category = product.Category,
-                    Designer = product.Designer,
-                    Size = product.Size,
-                    Color = product.Color,
-                    Condition = product.Condition,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Shipping = product.Shipping,
-                    Images = uploadedFiles,
-                    OwnerName = account.Username
-                });
-                context.SaveChanges();
-
+            if (productLogic.Sell(product, postedFiles, environment.WebRootPath, HttpContext, context))
                 return RedirectToAction("Items", "Account");
-            }
+
             else
-            {
-                return View(new ProductModel());
-            }
+                return View();  
         }
     }
 }

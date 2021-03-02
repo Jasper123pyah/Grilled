@@ -27,4 +27,10 @@
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GrilledCommon\GrilledCommon.csproj" />
+    <ProjectReference Include="..\GrilledData\GrilledData.csproj" />
+    <ProjectReference Include="..\GrilledLogic\GrilledLogic.csproj" />
+  </ItemGroup>
+
 </Project>

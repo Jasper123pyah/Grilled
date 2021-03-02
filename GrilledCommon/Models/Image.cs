@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Grilled.Models
+namespace GrilledCommon.Models
 {
     public class Image
     {

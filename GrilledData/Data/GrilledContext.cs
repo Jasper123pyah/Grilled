@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Grilled.Models;
+using GrilledCommon.Models;
 
-namespace Grilled.Data
+namespace GrilledData.Data
 {
     public class GrilledContext : DbContext
     {

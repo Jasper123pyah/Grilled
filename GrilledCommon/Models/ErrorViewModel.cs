@@ -1,6 +1,6 @@
 using System;
 
-namespace Grilled.Models
+namespace GrilledCommon.Models
 {
     public class ErrorViewModel
     {

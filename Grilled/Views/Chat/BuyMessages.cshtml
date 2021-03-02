@@ -1,4 +1,5 @@
-﻿@model DisplayMessagesModel
+﻿@model GrilledCommon.Models.DisplayMessagesModel
+
 
 
 <h1 class="display-4"><b>@Context.Request.Cookies["Login"]</b></h1>
@@ -6,7 +7,7 @@
 <div class="row">
     <div class="col-2">
         <div class="list-group">
-            <a class="list-group-item list-group-item-action list-group-item-secondary" asp-area="" asp-controller="Account" asp-action="BuyMessages">Messages</a>
+            <a class="list-group-item list-group-item-action list-group-item-secondary" asp-area="" asp-controller="Chat" asp-action="BuyMessages">Messages</a>
             <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
             <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a>
             <a class="list-group-item list-group-item-action list-group-item-light"><s>My Sizes</s></a>
@@ -21,10 +22,10 @@
         <hr />
         <div class="row">
             <div class="col-sm">
-                <a class="btn btn-light" style="width:100%" asp-area="" asp-controller="Account" asp-action="BuyMessages">Buy Chats</a>
+                <a class="btn btn-light" style="width:100%" asp-area="" asp-controller="Chat" asp-action="BuyMessages" id="chatSelect" name="chatSelect" value="Buy">Buy Chats</a>
             </div>
             <div class="col-sm">
-                <a class="btn btn-light" style="width:100%" asp-area="" asp-controller="Account" asp-action="SellMessages">Sell Chats</a>
+                <a class="btn btn-light" style="width:100%" asp-area="" asp-controller="Chat" asp-action="SellMessages" id="chatSelect" name="chatSelect" value="Sell">Sell Chats</a>
             </div>
         </div>
         <br />
@@ -33,9 +34,19 @@
                     <div class="list-group">
                         @if (Model.Chats != null)
                         {
-                            foreach (ChatModel chat in Model.Chats)
+                            foreach (GrilledCommon.Models.ChatModel chat in Model.Chats)
                             {
-                                <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Account" asp-action="SellMessages" asp-route-id=@chat.Id>@chat.Users</a>
+                                <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Chat" asp-action="BuyMessages" asp-route-id=@chat.Id>
+                                    @if(chat.Product != null)
+                                    {
+                                        <div class="img-fluid" src="@chat.Product.Images[0].Source"></div>
+                                    }
+                                        
+                                    @if(chat.Product == null)
+                                    {
+                                        <div>Product unavailable</div>
+                                    }                                  
+                                </a>
                             }
                         }
                     </div>
@@ -43,7 +54,7 @@
                 <div class="col-9">
                     @if (Model.Messages.Count != 0)
                     {
-                        foreach (MessageModel message in Model.Messages)
+                        foreach (GrilledCommon.Models.MessageModel message in Model.Messages)
                         {
                             <div class="row">
                                 <div class="col-sm">
@@ -71,7 +82,7 @@
                             </div>
                         }
                         <br />
-                        <form class="form-inline" method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="SellSend">
+                        <form class="form-inline" method="post" enctype="multipart/form-data" asp-controller="Chat" asp-action="BuySend">
                             <input type="hidden" name="messageId" id="messageId" asp-for="@Model.Messages[0].Id" />
                             <div class="input-group" style="width:100%">
                                 <input type="text" class="form-control" id="message" name="message" placeholder="Send Message...">
