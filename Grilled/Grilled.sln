@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grilled", "Grilled.csproj", "{FE2CC928-5F05-46DE-A1E8-750D4EB83FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrilledLogic", "..\GrilledLogic\GrilledLogic.csproj", "{568A5F29-591D-4E7F-B144-4E3610F2D135}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrilledLogic", "..\GrilledLogic\GrilledLogic.csproj", "{568A5F29-591D-4E7F-B144-4E3610F2D135}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrilledData", "..\GrilledData\GrilledData.csproj", "{CCD20A48-90FE-4FD1-A2B3-FE29A10BB044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrilledData", "..\GrilledData\GrilledData.csproj", "{CCD20A48-90FE-4FD1-A2B3-FE29A10BB044}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrilledCommon", "..\GrilledCommon\GrilledCommon.csproj", "{85508DDF-3AA2-4BF2-B677-D4315CFE6760}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrilledCommon", "..\GrilledCommon\GrilledCommon.csproj", "{85508DDF-3AA2-4BF2-B677-D4315CFE6760}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

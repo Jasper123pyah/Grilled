@@ -39,7 +39,7 @@
                                 <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Chat" asp-action="BuyMessages" asp-route-id=@chat.Id>
                                     @if(chat.Product != null)
                                     {
-                                        <div class="img-fluid" src="@chat.Product.Images[0].Source"></div>
+                                        <img class="img-fluid" style="height:80px" src="@chat.Product.Images[0].Source"/>
                                     }
                                         
                                     @if(chat.Product == null)

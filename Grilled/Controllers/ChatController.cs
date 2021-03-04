@@ -34,13 +34,13 @@ namespace Grilled.Controllers
         [HttpPost]
         public ActionResult BuySend(string message, Guid messageId)
         {
-            return RedirectToAction("BuyMessages", chatLogic.BuySend(message, messageId, HttpContext, context));
+            return RedirectToAction("BuyMessages", chatLogic.Send(message, messageId, HttpContext, context));
         }
 
         [HttpPost]
         public ActionResult SellSend(string message, Guid messageId)
         {
-            return RedirectToAction("SellMessages", chatLogic.SellSend(message, messageId, HttpContext, context));
+            return RedirectToAction("SellMessages", chatLogic.Send(message, messageId, HttpContext, context));
         }
 
         public ActionResult BuyMessages(ChatModel chat)

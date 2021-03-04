@@ -62,24 +62,7 @@ namespace GrilledLogic
             }
             context.SaveChanges();
         }
-        public ChatModel BuySend(string message, Guid messageId, HttpContext httpContext, GrilledContext context)
-        {
-            MessageModel searchmessage = context.Message.FirstOrDefault(a => a.Id == messageId);
-            ChatModel chat = context.Chat.Include(a => a.Messages).FirstOrDefault(a => a.Messages.Contains(searchmessage));
-
-            if (chat != null)
-            {
-                chat.Messages.Add(new MessageModel()
-                {
-                    Message = message,
-                    SenderName = httpContext.Request.Cookies["Login"],
-                    Time = DateTime.Now
-                });
-            }
-            context.SaveChanges();
-            return chat;
-        }
-        public ChatModel SellSend(string message, Guid messageId, HttpContext httpContext, GrilledContext context)
+        public ChatModel Send(string message, Guid messageId, HttpContext httpContext, GrilledContext context)
         {
             MessageModel searchmessage = context.Message.FirstOrDefault(a => a.Id == messageId);
             ChatModel chat = context.Chat.Include(a => a.Messages).FirstOrDefault(a => a.Messages.Contains(searchmessage));
@@ -98,20 +81,20 @@ namespace GrilledLogic
         }
         public DisplayMessagesModel BuyMessages(ChatModel chat, HttpContext httpContext, GrilledContext context)
         {
-            account = context.Account.Include(a => a.BuyChats).ThenInclude(a => a.Messages)
+            account = context.Account.Include(a => a.BuyChats).ThenInclude(a => a.Messages).Include(a => a.BuyChats)
+                                     .ThenInclude(a => a.Product).ThenInclude(a => a.Images)
                                      .FirstOrDefault(a => a.Username == httpContext.Request.Cookies["Login"]);
+
+            foreach (ChatModel _chat in account.BuyChats)
+            {
+                _chat.Product.Images[0].Source = functions.GetImagePath(httpContext) + _chat.Product.Images[0].Name;
+            }
 
             DisplayMessagesModel mdisplay = new DisplayMessagesModel
             {
                 Chats = account.BuyChats,
                 Messages = new List<MessageModel>()
             };
-
-            foreach (ChatModel _chat in mdisplay.Chats)
-            {
-                if (_chat.Product != null)
-                    _chat.Product.Images[0].Source = functions.GetImagePath(httpContext) + _chat.Product.Images[0].Name;
-            }
 
             if (chat != null)
             {
@@ -129,8 +112,14 @@ namespace GrilledLogic
         }
         public DisplayMessagesModel SellMessages(ChatModel chat, HttpContext httpContext, GrilledContext context)
         {
-            account = context.Account.Include(a => a.SellChats).ThenInclude(a => a.Messages)
+            account = context.Account.Include(a => a.SellChats).ThenInclude(a => a.Messages).Include(a => a.SellChats)
+                                     .ThenInclude(a => a.Product).ThenInclude(a => a.Images)
                                      .FirstOrDefault(a => a.Username == httpContext.Request.Cookies["Login"]);
+
+            foreach (ChatModel _chat in account.SellChats)
+            {               
+                _chat.Product.Images[0].Source = functions.GetImagePath(httpContext) + _chat.Product.Images[0].Name;
+            }
 
             DisplayMessagesModel mdisplay = new DisplayMessagesModel
             {
@@ -138,11 +127,6 @@ namespace GrilledLogic
                 Messages = new List<MessageModel>()
             };
 
-            foreach (ChatModel _chat in mdisplay.Chats)
-            {
-                if (_chat.Product != null)
-                    _chat.Product.Images[0].Source = functions.GetImagePath(httpContext) + _chat.Product.Images[0].Name;
-            }
 
             if (chat != null)
             {

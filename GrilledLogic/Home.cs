@@ -22,6 +22,7 @@ namespace GrilledLogic
             }
             return display;
         }
+
         public DisplayProductModel Search(string search, string category, HttpContext httpContext, GrilledContext context)
         {
             display.Products = new List<ProductModel>();

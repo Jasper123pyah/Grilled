@@ -44,7 +44,7 @@ namespace GrilledLogic
 
             foreach (IFormFile postedFile in postedFiles)
             {
-                if (postedFile.FileName.EndsWith(".jpg") || postedFile.FileName.EndsWith(".png"))
+                if (postedFile.FileName.EndsWith(".jpg") || postedFile.FileName.EndsWith(".png") || postedFile.FileName.EndsWith(".jpeg"))
                 {
                     string fileName = Path.GetFileName(postedFile.FileName);
                     using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))

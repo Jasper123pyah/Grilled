@@ -16,8 +16,6 @@ namespace Grilled.Controllers
 {
     public class ProductController : Controller
     {
-        ProductModel product = new ProductModel();
-        AccountModel account = new AccountModel();
         private readonly GrilledContext context;
         private IWebHostEnvironment environment;
         GrilledLogic.Product productLogic = new GrilledLogic.Product();
