@@ -1,4 +1,5 @@
 ﻿using GrilledCommon.Models;
+using GrilledData;
 using GrilledData.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,21 @@ namespace GrilledLogic
 {
     public class CommonFunctions
     {
+        ProductData productData = new ProductData();
+        AccountData accountData = new AccountData();
         public string GetImagePath(HttpContext httpContext)
         {
             return @"https://" + httpContext.Request.Host.ToString() + @"/Uploads/";
         }
         public void AddToDisplay(ProductModel product, GrilledContext context, string imagepath, List<ProductModel> products)
         {
-            ProductModel productAdd = context.Product.Include(a => a.Images).FirstOrDefault(p => p.Id == product.Id);
+            ProductModel productAdd = productData.GetProduct(product.Id, context);
             productAdd.Images[0].Source = imagepath + productAdd.Images[0].Name;
             products.Add(productAdd);
+        }
+        public string GetAccountName(string accId, GrilledContext context)
+        {
+            return accountData.GetAccount(accId, context).Username;
         }
     }
 }

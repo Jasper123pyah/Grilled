@@ -2,7 +2,7 @@
 
 
 
-<h1 class="display-4"><b>@Context.Request.Cookies["Login"]</b></h1>
+<h1 class="display-4"><b>@Context.Request.Cookies["Name"]</b></h1>
 <hr />
 <div class="row">
     <div class="col-2">
@@ -62,7 +62,7 @@
                                     {
                                         <div class="card">
                                             <div class="card-header">
-                                                @message.SenderName: @message.Message
+                                                <b>@message.SenderName:</b> @message.Message
                                             </div>
                                             @message.Time
                                         </div>
@@ -73,7 +73,7 @@
                                     {
                                         <div class="card">
                                             <div class="card-header">
-                                                @message.SenderName: @message.Message
+                                                <b>@message.SenderName:</b> @message.Message
                                             </div>
                                             @message.Time
                                         </div>

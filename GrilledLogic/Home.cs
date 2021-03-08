@@ -1,4 +1,5 @@
 ﻿using GrilledCommon.Models;
+using GrilledData;
 using GrilledData.Data;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -9,14 +10,16 @@ namespace GrilledLogic
 {
     public class Home
     {
-        DisplayProductModel display = new DisplayProductModel();
+        DisplayProductModel display = new DisplayProductModel()
+        {
+            Products = new List<ProductModel>()
+        };
         CommonFunctions functions = new CommonFunctions();
+        ProductData productData = new ProductData();
 
         public DisplayProductModel IndexDisplay(HttpContext httpContext, GrilledContext context)
         {
-            display.Products = new List<ProductModel>();
-
-            foreach (ProductModel product in context.Product)
+            foreach (ProductModel product in productData.GetAllProducts(context))
             {
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
@@ -25,20 +28,18 @@ namespace GrilledLogic
 
         public DisplayProductModel Search(string search, string category, HttpContext httpContext, GrilledContext context)
         {
-            display.Products = new List<ProductModel>();
-
             if (category == "All Categories")
             {
                 if (search == null)
                 {
-                    foreach (ProductModel product in context.Product)
+                    foreach (ProductModel product in productData.GetAllProducts(context))
                     {
                         functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
                     }
                 }
                 else
                 {
-                    foreach (ProductModel product in context.Product)
+                    foreach (ProductModel product in productData.GetAllProducts(context))
                     {
                         if (product.Name.ToLower().Contains(search.ToLower()) || product.Designer.ToLower().Contains(search.ToLower()) || product.Description.ToLower().Contains(search.ToLower()))
                         {
@@ -49,7 +50,7 @@ namespace GrilledLogic
             }
             else
             {
-                foreach (ProductModel product in context.Product)
+                foreach (ProductModel product in productData.GetAllProducts(context))
                 {
                     if (product.Category == category)
                     {

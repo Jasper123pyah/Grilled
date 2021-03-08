@@ -50,7 +50,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @if (Context.Request.Cookies["Login"] != null)
                             {
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index"><b>@Context.Request.Cookies["Login"]</b></a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index"><b>@Context.Request.Cookies["Name"]</b></a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-area="" asp-controller="Chat" asp-action="BuyMessages">Messages</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>

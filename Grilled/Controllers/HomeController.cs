@@ -26,6 +26,7 @@ namespace Grilled.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            context.Database.EnsureCreated();
             return View(homeLogic.IndexDisplay(HttpContext, context));
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GrilledCommon.Models;
+using GrilledData;
 using GrilledData.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -9,25 +10,17 @@ namespace GrilledLogic
 {
     public class Account
     {
-        AccountModel account = new AccountModel();
-        DisplayProductModel display = new DisplayProductModel();
+        DisplayProductModel display = new DisplayProductModel()
+        {
+            Products = new List<ProductModel>()
+        };
         CommonFunctions functions = new CommonFunctions();
+        AccountData accountData = new AccountData();
 
         public DisplayProductModel Favorite(HttpContext httpContext, GrilledContext context)
         {
-            account = context.Account.Where(a => a.Username == httpContext.Request.Cookies["Login"]).Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
-
-            display.Products = new List<ProductModel>();
-
-            if (account == null)
-                return display;
-
-            if (account.Favorites == null)
-                return display;
-
-            foreach (FavoriteModel favorite in account.Favorites)
-            {
-                ProductModel product = context.Product.Where(p => p.Id == favorite.ProductId).Include(a => a.Images).FirstOrDefault();
+            foreach (ProductModel product in accountData.GetAllFavorites(httpContext.Request.Cookies["Login"], context))
+            {      
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
             return display;
@@ -35,62 +28,34 @@ namespace GrilledLogic
 
         public void Save(HttpContext httpContext, ProductModel product, GrilledContext context)
         {
-            account = context.Account.Where(a => a.Username == httpContext.Request.Cookies["Login"]).Include(a => a.Favorites).Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault();
-
-            if (account.Favorites.FirstOrDefault(a => a.ProductId == product.Id) != null)
-                context.Favorite.Remove(context.Favorite.Where(f => f.ProductId == product.Id).FirstOrDefault());
-
-            else
-            {
-                FavoriteModel favorite = new FavoriteModel() { ProductId = product.Id };
-                favorite.AddFavToAccount(account);
-            }
-            context.SaveChanges();
+            accountData.AddFavorite(httpContext.Request.Cookies["Login"], product, context);
         }
+
         public DisplayProductModel Items(HttpContext httpContext, GrilledContext context)
         {
-            account = context.Account.Include(a => a.Products).ThenInclude(b => b.Images).FirstOrDefault(a => a.Username == httpContext.Request.Cookies["Login"]);
-
-            display.Products = new List<ProductModel>();
-
-            if (account == null)
-                return display;
-
-            foreach (ProductModel product in account.Products)
+            foreach (ProductModel product in accountData.GetItems(httpContext.Request.Cookies["Login"], context))
             {
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
             return display;
         }
+
         public bool Login(LoginModel login, HttpContext httpContext, GrilledContext context)
         {
-            account = context.Account.FirstOrDefault(a => a.Username == login.Username);
-            if (account != null && login.Password == account.Password)
+            if (accountData.LoginCheck(login, context) != null)
             {
-                httpContext.Response.Cookies.Append("Login", account.Username);
+                httpContext.Response.Cookies.Append("Login", accountData.LoginCheck(login, context));
+                httpContext.Response.Cookies.Append("Name", functions.GetAccountName(httpContext.Request.Cookies["Login"], context));
                 return true;
             }
             return false;
         }
+
         public bool Register(RegistrationModel registration, GrilledContext context)
         {
-            account = context.Account.FirstOrDefault(a => a.Username == registration.Username);
-            if (account == null)
-            {
-                context.Account.Add(new AccountModel()
-                {
-                    Username = registration.Username,
-                    Password = registration.Password,
-                    Email = registration.Email
-                });
-                context.SaveChanges();
-
-                return true; 
-            }
-            else
-            {
-                return false;  
-            }
+            if (accountData.AddAccount(registration, context))
+                return true;
+            return false;
         }
     }
 }

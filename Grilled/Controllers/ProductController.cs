@@ -39,6 +39,15 @@ namespace Grilled.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
+        {
+            if (productLogic.Sell(product, postedFiles, environment.WebRootPath, HttpContext, context))
+                return RedirectToAction("Items", "Account");
+
+            else
+                return View();
+        }
 
         [HttpGet]
         public ActionResult Edit(ProductModel product)
@@ -52,14 +61,6 @@ namespace Grilled.Controllers
             return RedirectToAction("Details", "Product", productLogic.Change(product, context));
         }
 
-        [HttpPost]
-        public ActionResult Sell(ProductModel product, List<IFormFile> postedFiles)
-        {
-            if (productLogic.Sell(product, postedFiles, environment.WebRootPath, HttpContext, context))
-                return RedirectToAction("Items", "Account");
 
-            else
-                return View();  
-        }
     }
 }

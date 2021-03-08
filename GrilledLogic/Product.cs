@@ -1,4 +1,5 @@
 ﻿using GrilledCommon.Models;
+using GrilledData;
 using GrilledData.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -12,27 +13,15 @@ namespace GrilledLogic
 {
     public class Product
     {
-        AccountModel account = new AccountModel();
         CommonFunctions functions = new CommonFunctions();
+        ProductData productData = new ProductData();
 
         public ProductModel Change(ProductModel product, GrilledContext context)
-        {
-            ProductModel model = context.Product.FirstOrDefault(p => p.Id == product.Id);
-            account = context.Account.FirstOrDefault(a => a.Username == model.OwnerName);
-
-            model.Name = product.Name;
-            model.Condition = product.Condition;
-            model.Description = product.Description;
-            model.Price = product.Price;
-            model.Shipping = product.Shipping;
-
-            context.SaveChanges();
-            return product;
+        {     
+            return productData.EditProduct(product, context);
         }
         public bool Sell(ProductModel product, List<IFormFile> postedFiles, string _path , HttpContext httpContext, GrilledContext context)
         {
-            account = context.Account.FirstOrDefault(a => a.Username == httpContext.Request.Cookies["Login"]);
-
             string path = Path.Combine(_path, "Uploads");
 
             if (!Directory.Exists(path))
@@ -60,52 +49,27 @@ namespace GrilledLogic
                     return false;
             }
 
-            if (account != null)
-            {
-                if (account.Products == null)
-                    account.Products = new List<ProductModel>();
-
-                account.Products.Add(new ProductModel()
-                {
-                    Name = product.Name,
-                    Category = product.Category,
-                    Designer = product.Designer,
-                    Size = product.Size,
-                    Color = product.Color,
-                    Condition = product.Condition,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Shipping = product.Shipping,
-                    Images = uploadedFiles,
-                    OwnerName = account.Username
-                });
-                context.SaveChanges();
-
+            if (productData.AddProduct(context, uploadedFiles, product, httpContext.Request.Cookies["Login"]))
                 return true;
-            }
-            else
-            {
-                return false; //View(new ProductModel());
-            }
+
+           return false; 
         }
 
         public ProductModel Edit(ProductModel product, HttpContext httpContext, GrilledContext context)
         {
-            ProductModel model = context.Product.Include(a => a.Images).FirstOrDefault(p => p.Id == product.Id);
+            ProductModel model = productData.GetProduct(product.Id, context); 
             model.Images[0].Source = functions.GetImagePath(httpContext) + model.Images[0].Name;
             return model;
         }
         public ProductModel Details(ProductModel product, HttpContext httpContext, GrilledContext context)
         {
-            ProductModel model = context.Product.Include(a => a.Images).FirstOrDefault(p => p.Id == product.Id);
+            ProductModel model = productData.GetProduct(product.Id, context);
             model.Images[0].Source = functions.GetImagePath(httpContext) + model.Images[0].Name;
             return model;
         }
         public void Delete(ProductModel product, GrilledContext context)
         {
-            ProductModel model = context.Product.Include(a => a.Images).FirstOrDefault(p => p.Id == product.Id);
-            context.Product.Remove(model);
-            context.SaveChanges();
+            productData.DeleteProduct(product, context);
         }
     }
 }
