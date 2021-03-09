@@ -11,12 +11,15 @@ using System.IO;
 using Microsoft.AspNetCore.Http.Extensions;
 using GrilledCommon.Models;
 using GrilledData.Data;
+using GrilledLogic;
+using System.Security.Claims;
 
 namespace Grilled.Controllers
 {
     public class AccountController : Controller
     { 
-        GrilledLogic.Account accountLogic = new GrilledLogic.Account();
+        Account accountLogic = new Account();
+        JWTLogic jwtLogic = new JWTLogic();
         private readonly GrilledContext context;
         public AccountController(GrilledContext _context, IWebHostEnvironment _environment)
         {
@@ -25,8 +28,8 @@ namespace Grilled.Controllers
 
         public ActionResult Index()
         {
-            if(HttpContext.Request.Cookies["Login"] == null)
-                return RedirectToAction("Login");
+            if(HttpContext.Request.Cookies["Token"] == null)
+                return RedirectToAction("Token");
             else
             {
                 return View();
@@ -34,9 +37,9 @@ namespace Grilled.Controllers
         }
         public ActionResult Login()
         {
-            if(HttpContext.Request.Cookies["Login"] != null)
+            if(HttpContext.Request.Cookies["Token"] != null)
             {
-                HttpContext.Response.Cookies.Delete("Login");
+                HttpContext.Response.Cookies.Delete("Token");
                 return RedirectToAction("Login", "Account");
             }
             return View();

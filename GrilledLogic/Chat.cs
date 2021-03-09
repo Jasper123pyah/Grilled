@@ -14,20 +14,22 @@ namespace GrilledLogic
     {
         ChatData chatData = new ChatData();
         CommonFunctions functions = new CommonFunctions();
+        JWTLogic jwtLogic = new JWTLogic();
 
         public void StartChat(string messagetext, string receivername, Guid productId, HttpContext httpContext, GrilledContext context)
         {
-            chatData.AddChat(messagetext, receivername, productId, httpContext.Request.Cookies["Login"], context);
+            chatData.AddChat(messagetext, receivername, productId, jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context);
         }
         public ChatModel Send(string message, Guid messageId, HttpContext httpContext, GrilledContext context)
         {    
-            return chatData.SendMessage(message, messageId, httpContext.Request.Cookies["Login"], context);
+            return chatData.SendMessage(message, messageId, jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context);
         }
         public DisplayMessagesModel BuyMessages(ChatModel chat, HttpContext httpContext, GrilledContext context)
         {
+            ChatModel selectedChat = chatData.SelectChat(chat, context);
             DisplayMessagesModel mdisplay = new DisplayMessagesModel
             {
-                Chats = chatData.GetChats(httpContext.Request.Cookies["Login"],context,"Buy"),
+                Chats = chatData.GetChats(jwtLogic.GetId(httpContext.Request.Cookies["Token"]),context,"Buy"),
                 Messages = new List<MessageModel>()
             };
 
@@ -36,9 +38,9 @@ namespace GrilledLogic
                 _chat.Product.Images[0].Source = functions.GetImagePath(httpContext) + _chat.Product.Images[0].Name;
             }
 
-            if (chat != null) // chat only if chat  is selected
+            if (selectedChat != null) // chat only if chat  is selected
             {
-                foreach (MessageModel message in chatData.SelectChat(chat, context).Messages)
+                foreach (MessageModel message in selectedChat.Messages)
                 {
                     mdisplay.Messages.Add(message);
                 }
@@ -49,10 +51,10 @@ namespace GrilledLogic
         }
         public DisplayMessagesModel SellMessages(ChatModel chat, HttpContext httpContext, GrilledContext context)
         {
-
+            ChatModel selectedChat = chatData.SelectChat(chat, context);
             DisplayMessagesModel mdisplay = new DisplayMessagesModel
             {
-                Chats = chatData.GetChats(httpContext.Request.Cookies["Login"], context, "Sell"),
+                Chats = chatData.GetChats(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context, "Sell"),
                 Messages = new List<MessageModel>()
             };
 
@@ -61,9 +63,9 @@ namespace GrilledLogic
                 _chat.Product.Images[0].Source = functions.GetImagePath(httpContext) + _chat.Product.Images[0].Name;
             }
 
-            if (chat != null) // chat only if chat  is selected
+            if (selectedChat != null) // chat only if chat  is selected
             {
-                foreach (MessageModel message in chatData.SelectChat(chat, context).Messages)
+                foreach (MessageModel message in selectedChat.Messages)
                 {
                     mdisplay.Messages.Add(message);
                 }

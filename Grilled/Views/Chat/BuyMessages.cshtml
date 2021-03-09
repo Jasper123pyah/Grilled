@@ -2,7 +2,7 @@
 
 
 
-<h1 class="display-4"><b>@Context.Request.Cookies["Name"]</b></h1>
+<h1 class="display-4"><b>@GrilledLogic.GetLoginName.Name(Context)</b></h1>
 <hr />
 <div class="row">
     <div class="col-2">
@@ -58,7 +58,7 @@
                         {
                             <div class="row">
                                 <div class="col-sm">
-                                    @if (message.SenderName != Context.Request.Cookies["Login"])
+                                    @if (message.SenderName != @GrilledLogic.GetLoginName.Name(Context))
                                     {
                                         <div class="card">
                                             <div class="card-header">
@@ -69,7 +69,7 @@
                                     }
                                 </div>
                                 <div class="col-sm">
-                                    @if (message.SenderName == Context.Request.Cookies["Login"])
+                                    @if (message.SenderName == @GrilledLogic.GetLoginName.Name(Context))
                                     {
                                         <div class="card">
                                             <div class="card-header">

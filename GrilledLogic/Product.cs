@@ -15,7 +15,7 @@ namespace GrilledLogic
     {
         CommonFunctions functions = new CommonFunctions();
         ProductData productData = new ProductData();
-
+        JWTLogic jwtLogic = new JWTLogic();
         public ProductModel Change(ProductModel product, GrilledContext context)
         {     
             return productData.EditProduct(product, context);
@@ -49,7 +49,7 @@ namespace GrilledLogic
                     return false;
             }
 
-            if (productData.AddProduct(context, uploadedFiles, product, httpContext.Request.Cookies["Login"]))
+            if (productData.AddProduct(context, uploadedFiles, product, jwtLogic.GetId(httpContext.Request.Cookies["Token"])))
                 return true;
 
            return false; 

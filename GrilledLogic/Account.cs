@@ -16,10 +16,11 @@ namespace GrilledLogic
         };
         CommonFunctions functions = new CommonFunctions();
         AccountData accountData = new AccountData();
+        JWTLogic jwtLogic = new JWTLogic();
 
         public DisplayProductModel Favorite(HttpContext httpContext, GrilledContext context)
         {
-            foreach (ProductModel product in accountData.GetAllFavorites(httpContext.Request.Cookies["Login"], context))
+            foreach (ProductModel product in accountData.GetAllFavorites(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context))
             {      
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
@@ -28,12 +29,12 @@ namespace GrilledLogic
 
         public void Save(HttpContext httpContext, ProductModel product, GrilledContext context)
         {
-            accountData.AddFavorite(httpContext.Request.Cookies["Login"], product, context);
+            accountData.AddFavorite(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), product, context);
         }
 
         public DisplayProductModel Items(HttpContext httpContext, GrilledContext context)
         {
-            foreach (ProductModel product in accountData.GetItems(httpContext.Request.Cookies["Login"], context))
+            foreach (ProductModel product in accountData.GetItems(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context))
             {
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
@@ -42,10 +43,16 @@ namespace GrilledLogic
 
         public bool Login(LoginModel login, HttpContext httpContext, GrilledContext context)
         {
-            if (accountData.LoginCheck(login, context) != null)
+            string accountId = accountData.LoginCheck(login, context);
+            CookieOptions cookieOptions = new CookieOptions()
+            { 
+                Expires = new DateTimeOffset(DateTime.Now.AddDays(7))
+            };
+
+            if (accountId != null)
             {
-                httpContext.Response.Cookies.Append("Login", accountData.LoginCheck(login, context));
-                httpContext.Response.Cookies.Append("Name", functions.GetAccountName(httpContext.Request.Cookies["Login"], context));
+                string tokenstring = jwtLogic.GetToken(login.Username, accountId);
+                httpContext.Response.Cookies.Append("Token", tokenstring, cookieOptions);
                 return true;
             }
             return false;

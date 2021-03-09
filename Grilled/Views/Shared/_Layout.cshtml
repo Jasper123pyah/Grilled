@@ -48,9 +48,9 @@
                             Account
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @if (Context.Request.Cookies["Login"] != null)
+                            @if (@GrilledLogic.GetLoginName.Name(Context) != null)
                             {
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index"><b>@Context.Request.Cookies["Name"]</b></a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Index"><b>@GrilledLogic.GetLoginName.Name(Context)</b></a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-area="" asp-controller="Chat" asp-action="BuyMessages">Messages</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Items">My Items</a>
@@ -58,7 +58,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item alert-danger" asp-area="" asp-controller="Account" asp-action="Login">Log Out</a>
                             }
-                            @if (Context.Request.Cookies["Login"] == null)
+                            @if (@GrilledLogic.GetLoginName.Name(Context) == null)
                             {
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                             }

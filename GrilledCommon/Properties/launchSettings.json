@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GrilledCommon": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "GRILLED_SECRET": "dafa1f10ce5343fa8ed9316af029162b"
+      }
+    }
+  }
+}
