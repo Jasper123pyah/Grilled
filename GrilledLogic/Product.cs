@@ -49,7 +49,7 @@ namespace GrilledLogic
                     return false;
             }
 
-            if (productData.AddProduct(context, uploadedFiles, product, jwtLogic.GetId(httpContext.Request.Cookies["Token"])))
+            if (productData.AddProduct(context, uploadedFiles, product, jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"])))
                 return true;
 
            return false; 

@@ -18,18 +18,18 @@ namespace GrilledLogic
 
         public void StartChat(string messagetext, string receivername, Guid productId, HttpContext httpContext, GrilledContext context)
         {
-            chatData.AddChat(messagetext, receivername, productId, jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context);
+            chatData.AddChat(messagetext, receivername, productId, jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), context);
         }
         public ChatModel Send(string message, Guid messageId, HttpContext httpContext, GrilledContext context)
         {    
-            return chatData.SendMessage(message, messageId, jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context);
+            return chatData.SendMessage(message, messageId, jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), context);
         }
         public DisplayMessagesModel BuyMessages(ChatModel chat, HttpContext httpContext, GrilledContext context)
         {
             ChatModel selectedChat = chatData.SelectChat(chat, context);
             DisplayMessagesModel mdisplay = new DisplayMessagesModel
             {
-                Chats = chatData.GetChats(jwtLogic.GetId(httpContext.Request.Cookies["Token"]),context,"Buy"),
+                Chats = chatData.GetChats(jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]),context,"Buy"),
                 Messages = new List<MessageModel>()
             };
 
@@ -54,7 +54,7 @@ namespace GrilledLogic
             ChatModel selectedChat = chatData.SelectChat(chat, context);
             DisplayMessagesModel mdisplay = new DisplayMessagesModel
             {
-                Chats = chatData.GetChats(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context, "Sell"),
+                Chats = chatData.GetChats(jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), context, "Sell"),
                 Messages = new List<MessageModel>()
             };
 

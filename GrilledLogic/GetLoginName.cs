@@ -13,7 +13,7 @@ namespace GrilledLogic
     {
         public static string Name(HttpContext context)
         {
-            string token = context.Request.Cookies["Token"];
+            string token = context.Request.Cookies["Grilled_Token_Login"];
             if (token != null)
             {
                 IAuthService authservice = new JWTService(Environment.GetEnvironmentVariable("GRILLED_SECRET"));

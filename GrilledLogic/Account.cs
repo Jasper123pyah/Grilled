@@ -20,7 +20,7 @@ namespace GrilledLogic
 
         public DisplayProductModel Favorite(HttpContext httpContext, GrilledContext context)
         {
-            foreach (ProductModel product in accountData.GetAllFavorites(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context))
+            foreach (ProductModel product in accountData.GetAllFavorites(jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), context))
             {      
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
@@ -29,12 +29,12 @@ namespace GrilledLogic
 
         public void Save(HttpContext httpContext, ProductModel product, GrilledContext context)
         {
-            accountData.AddFavorite(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), product, context);
+            accountData.AddFavorite(jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), product, context);
         }
 
         public DisplayProductModel Items(HttpContext httpContext, GrilledContext context)
         {
-            foreach (ProductModel product in accountData.GetItems(jwtLogic.GetId(httpContext.Request.Cookies["Token"]), context))
+            foreach (ProductModel product in accountData.GetItems(jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), context))
             {
                 functions.AddToDisplay(product, context, functions.GetImagePath(httpContext), display.Products);
             }
@@ -52,7 +52,7 @@ namespace GrilledLogic
             if (accountId != null)
             {
                 string tokenstring = jwtLogic.GetToken(login.Username, accountId);
-                httpContext.Response.Cookies.Append("Token", tokenstring, cookieOptions);
+                httpContext.Response.Cookies.Append("Grilled_Token_Login", tokenstring, cookieOptions);
                 return true;
             }
             return false;

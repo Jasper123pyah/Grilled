@@ -28,8 +28,8 @@ namespace Grilled.Controllers
 
         public ActionResult Index()
         {
-            if(HttpContext.Request.Cookies["Token"] == null)
-                return RedirectToAction("Token");
+            if(HttpContext.Request.Cookies["Grilled_Token_Login"] == null)
+                return RedirectToAction("Login");
             else
             {
                 return View();
@@ -37,9 +37,9 @@ namespace Grilled.Controllers
         }
         public ActionResult Login()
         {
-            if(HttpContext.Request.Cookies["Token"] != null)
+            if(HttpContext.Request.Cookies["Grilled_Token_Login"] != null)
             {
-                HttpContext.Response.Cookies.Delete("Token");
+                HttpContext.Response.Cookies.Delete("Grilled_Token_Login");
                 return RedirectToAction("Login", "Account");
             }
             return View();
