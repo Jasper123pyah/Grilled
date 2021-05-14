@@ -15,5 +15,6 @@ namespace GrilledCommon.Models
         public List<FavoriteModel> Favorites { get; set; }
         public List<ChatModel> SellChats { get; set; }
         public List<ChatModel> BuyChats { get; set; }
+        public List<ForYouModel> ForYouData { get; set; }
     }
 }

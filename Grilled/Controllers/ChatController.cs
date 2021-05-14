@@ -19,11 +19,7 @@ namespace Grilled.Controllers
         {
             context = _context;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
         [HttpPost]
         public ActionResult StartChat(string messagetext, string receivername, Guid productId)
         {

@@ -15,6 +15,7 @@ namespace GrilledData.Data
         public DbSet<FavoriteModel> Favorite { get; set; }
         public DbSet<MessageModel> Message { get; set; }
         public DbSet<ChatModel> Chat { get; set; }
+        public DbSet<ForYouModel> ForYou { get; set; }
         public GrilledContext(DbContextOptions options) : base(options) { }
     }
 }

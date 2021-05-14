@@ -13,7 +13,6 @@ namespace GrilledLogic
     public class CommonFunctions
     {
         ProductData productData = new ProductData();
-        AccountData accountData = new AccountData();
         public string GetImagePath(HttpContext httpContext)
         {
             return @"https://" + httpContext.Request.Host.ToString() + @"/Uploads/";
@@ -23,10 +22,6 @@ namespace GrilledLogic
             ProductModel productAdd = productData.GetProduct(product.Id, context);
             productAdd.Images[0].Source = imagepath + productAdd.Images[0].Name;
             products.Add(productAdd);
-        }
-        public string GetAccountName(string accId, GrilledContext context)
-        {
-            return accountData.GetAccount(accId, context).Username;
         }
     }
 }

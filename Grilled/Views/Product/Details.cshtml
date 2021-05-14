@@ -25,7 +25,7 @@
         <h5 class="font-weight-bold">Description</h5>
         <p>@Model.Description</p>
         <hr />
-        @if (Model.OwnerName != @GrilledLogic.GetLoginName.Name(Context) && @GrilledLogic.GetLoginName.Name(Context) != null)
+        @if (Model.OwnerName != @GrilledLogic.GetLogin.Name(Context) && @GrilledLogic.GetLogin.Name(Context) != null)
         {
             <button class="btn btn-dark" style="width:100%; max-height:20%;">PURCHASE</button>
             <br /> <br />
@@ -63,7 +63,7 @@
             <hr />
         }
         <h5><b>Seller:</b> @Model.OwnerName</h5>
-        @if (Model.OwnerName == @GrilledLogic.GetLoginName.Name(Context))
+        @if (Model.OwnerName == @GrilledLogic.GetLogin.Name(Context))
         {
             <div>
                 <a class="btn btn-secondary" asp-area="" asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>

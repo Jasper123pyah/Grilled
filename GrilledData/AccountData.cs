@@ -16,6 +16,7 @@ namespace GrilledData
             account = context.Account.Include(a => a.Favorites)
                                      .Include(a => a.Products)
                                      .ThenInclude(b => b.Images)
+                                     .Include(f => f.ForYouData)
                                      .FirstOrDefault(a => a.Id == accId);
             return account;
         }

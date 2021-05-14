@@ -2,7 +2,7 @@
 
 
 
-<h1 class="display-4"><b>@GrilledLogic.GetLoginName.Name(Context)</b></h1>
+<h1 class="display-4"><b>@GrilledLogic.GetLogin.Name(Context)</b></h1>
 <hr />
 <div class="row">
     <div class="col-2">
@@ -34,7 +34,7 @@
                     <div class="list-group">
                         @if (Model.Chats != null)
                         {
-                            foreach (GrilledCommon.Models.ChatModel chat in Model.Chats)
+                            foreach (ChatModel chat in Model.Chats)
                             {
                                 <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Chat" asp-action="BuyMessages" asp-route-id=@chat.Id>
                                     @if(chat.Product != null)
@@ -54,11 +54,11 @@
                 <div class="col-9">
                     @if (Model.Messages.Count != 0)
                     {
-                        foreach (GrilledCommon.Models.MessageModel message in Model.Messages)
+                        foreach (MessageModel message in Model.Messages)
                         {
                             <div class="row">
                                 <div class="col-sm">
-                                    @if (message.SenderName != @GrilledLogic.GetLoginName.Name(Context))
+                                    @if (message.SenderName != @GrilledLogic.GetLogin.Name(Context))
                                     {
                                         <div class="card">
                                             <div class="card-header">
@@ -69,7 +69,7 @@
                                     }
                                 </div>
                                 <div class="col-sm">
-                                    @if (message.SenderName == @GrilledLogic.GetLoginName.Name(Context))
+                                    @if (message.SenderName == @GrilledLogic.GetLogin.Name(Context))
                                     {
                                         <div class="card">
                                             <div class="card-header">

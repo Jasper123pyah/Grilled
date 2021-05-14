@@ -9,6 +9,7 @@ using System.Web;
 using Microsoft.AspNetCore;
 using GrilledCommon.Models;
 using GrilledData.Data;
+using GrilledLogic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,8 @@ namespace Grilled.Controllers
     {
         private readonly GrilledContext context;
         private IWebHostEnvironment environment;
-        GrilledLogic.Product productLogic = new GrilledLogic.Product();
+        Product productLogic = new Product();
+        private ForYou foryouLogic = new ForYou();
 
         public ProductController(GrilledContext _context, IWebHostEnvironment _environment)
         {
@@ -33,6 +35,7 @@ namespace Grilled.Controllers
         }
         public ActionResult Details(ProductModel product)
         {
+            foryouLogic.UpdateForYou(GetLogin.Id(HttpContext), product, context);
             return View(productLogic.Details(product, HttpContext, context));
         }
         public ActionResult Sell()

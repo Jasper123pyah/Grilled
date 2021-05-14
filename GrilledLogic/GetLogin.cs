@@ -9,7 +9,7 @@ using System.Text;
 
 namespace GrilledLogic
 {
-    public static class GetLoginName
+    public static class GetLogin
     {
         public static string Name(HttpContext context)
         {
@@ -24,6 +24,22 @@ namespace GrilledLogic
 
                 else
                     return name;
+            }
+            return null;
+        }
+        public static string Id(HttpContext context)
+        {
+            string token = context.Request.Cookies["Grilled_Token_Login"];
+            if (token != null)
+            {
+                IAuthService authservice = new JWTService(Environment.GetEnvironmentVariable("GRILLED_SECRET"));
+                string id = authservice.GetTokenClaims(token).ToList().FirstOrDefault(e => e.Type.Equals(ClaimTypes.NameIdentifier)).Value;
+
+                if (id == null)
+                    return null;
+
+                else
+                    return id;
             }
             return null;
         }
