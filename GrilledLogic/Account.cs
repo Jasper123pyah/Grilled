@@ -17,7 +17,7 @@ namespace GrilledLogic
         CommonFunctions functions = new CommonFunctions();
         AccountData accountData = new AccountData();
         JWTLogic jwtLogic = new JWTLogic();
-
+        
         public DisplayProductModel Favorite(HttpContext httpContext, GrilledContext context)
         {
             foreach (ProductModel product in accountData.GetAllFavorites(jwtLogic.GetId(httpContext.Request.Cookies["Grilled_Token_Login"]), context))

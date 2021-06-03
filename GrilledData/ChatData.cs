@@ -10,7 +10,6 @@ namespace GrilledData
 {
     public class ChatData
     {
-
         public void AddChat(string messagetext, string receivername, Guid productId, string accId, GrilledContext context)
         {
             AccountModel account = context.Account.FirstOrDefault(a => a.Id == accId);
@@ -68,7 +67,7 @@ namespace GrilledData
                 chat.Messages.Add(new MessageModel()
                 {
                     Message = message,
-                    SenderName = accId,
+                    SenderName = new AccountData().GetAccount(accId, context).Username,
                     Time = DateTime.Now
                 });
             }
