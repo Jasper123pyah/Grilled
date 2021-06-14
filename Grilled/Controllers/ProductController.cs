@@ -35,7 +35,7 @@ namespace Grilled.Controllers
         }
         public ActionResult Details(ProductModel product)
         {
-            foryouLogic.UpdateForYou(GetLogin.Id(HttpContext), product, context);
+            //foryouLogic.UpdateForYou(GetLogin.Id(HttpContext), product, context);
             return View(productLogic.Details(product, HttpContext, context));
         }
         public ActionResult Sell()

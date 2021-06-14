@@ -27,10 +27,6 @@
         <hr />
         @if (Model.OwnerName != @GrilledLogic.GetLogin.Name(Context) && @GrilledLogic.GetLogin.Name(Context) != null)
         {
-            <button class="btn btn-dark" style="width:100%; max-height:20%;">PURCHASE</button>
-            <br /> <br />
-            <button class="btn btn-outline-dark" style="width:100%; max-height:20%">OFFER</button>
-            <br /> <br />
             <button type="button" class="btn btn-outline-dark" style="width:100%; max-height:20%" data-toggle="modal" data-target="#messageModal">MESSAGE</button>
 
             <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

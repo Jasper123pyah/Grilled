@@ -35,6 +35,7 @@ namespace Grilled.Controllers
                 return View();
             }
         }
+
         public ActionResult Login()
         {
             if(HttpContext.Request.Cookies["Grilled_Token_Login"] != null)
@@ -59,13 +60,7 @@ namespace Grilled.Controllers
             accountLogic.Save(HttpContext, product, context);
             return RedirectToAction("Favorite");
         }
-
-        public ActionResult Settings()
-        {
-            return View();
-        }
-
-
+        
         [HttpPost]
         public ActionResult Login(LoginModel login)
         {

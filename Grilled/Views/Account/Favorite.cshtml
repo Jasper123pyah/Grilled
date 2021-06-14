@@ -10,6 +10,14 @@
     {
         <h4>You have no listings saved yet.</h4>
     }
+    @if (Context.Request.Cookies["Grilled_Token_Login"] == null)
+    {
+         <div>
+                <h4>You have to be logged in to add favorites.</h4>
+                <a class="btn btn-secondary" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+            </div>
+    }
+    
 <div class="card-columns">
     @foreach (GrilledCommon.Models.ProductModel product in Model.Products)
     {
